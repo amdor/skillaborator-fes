@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,21 +10,25 @@ import { ElaboratorQuestionComponent } from './component/elaborator-question/ela
 import { MatRadioModule } from '@angular/material/radio';
 import { StoreModule } from '@ngrx/store';
 import { elaboratorReducer } from './state/elaborator.reducer';
+import { ElaboratorEffect } from './state';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
     AppComponent,
     ElaboratorLobbyComponent,
-    ElaboratorQuestionComponent
+    ElaboratorQuestionComponent,
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatRadioModule,
-    StoreModule.forRoot({ elaborator: elaboratorReducer })
+    StoreModule.forRoot({ elaborator: elaboratorReducer }),
+    EffectsModule.forRoot([ElaboratorEffect]),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
