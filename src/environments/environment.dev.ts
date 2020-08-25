@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: "localhost:5000",
-  questionEndpoint: "/question"
+  apiUrl: 'http://localhost:5000',
+  questionEndpoint: '/question',
 };
 
 /*
