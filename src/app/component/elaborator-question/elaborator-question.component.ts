@@ -8,9 +8,14 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
-import { Question, Answer } from '../elaborator-question.model';
+import {
+  Question,
+  Answer,
+  SelectedAndRightAnswer,
+} from '../elaborator-question.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfigService } from '../../service';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'sk-elaborator-question',
@@ -28,16 +33,27 @@ export class ElaboratorQuestionComponent {
   @Input()
   currentQuestionNumber = 1;
 
+  @Input() maxQuestionCount;
+
+  @Input()
+  get readOnly(): boolean {
+    return this._readOnly;
+  }
+
+  set readonly(newVal: boolean) {
+    this._readOnly = coerceBooleanProperty(newVal);
+  }
+
+  // TODO readonly mode in HTML
+  @Input() selectedAndRightAnswer: SelectedAndRightAnswer;
+
   @Output()
   nextQuestionClick = new EventEmitter<string>();
 
-  readonly maxQuestionCount;
-
   private selectedAnswerId: string | undefined;
+  private _readOnly: boolean;
 
-  constructor(private snackBar: MatSnackBar, configService: ConfigService) {
-    this.maxQuestionCount = configService.getMaxQuestionsCount();
-  }
+  constructor(private snackBar: MatSnackBar, configService: ConfigService) {}
 
   onSelect(change: MatRadioChange) {
     this.selectedAnswerId = change.value;

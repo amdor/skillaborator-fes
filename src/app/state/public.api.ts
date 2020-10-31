@@ -8,4 +8,5 @@ export {
   getCurrentQuestion,
   getQuestions,
   getLoadingCurrentQuestion,
+  getSelectedAnswers,
 } from './elaborator/elaborator.selector';

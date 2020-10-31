@@ -16,6 +16,10 @@ export interface SelectedAnswer {
   answerId: string;
 }
 
+export interface SelectedAndRightAnswer extends SelectedAnswer {
+  rightAnswerId: string;
+}
+
 export interface Code {
   value: string;
   language: string;

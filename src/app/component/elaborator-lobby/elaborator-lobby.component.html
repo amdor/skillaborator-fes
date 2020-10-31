@@ -1,8 +1,0 @@
-<sk-elaborator-question
-  *ngIf="!isLoadingQuestion"
-  [question]="question"
-  [currentQuestionNumber]="currentQuestionNumber"
-  (nextQuestionClick)="getNextQuestion($event)"
-></sk-elaborator-question>
-
-<mat-spinner *ngIf="isLoadingQuestion"></mat-spinner>

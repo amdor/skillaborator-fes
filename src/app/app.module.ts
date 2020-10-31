@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ElaboratorLobbyComponent } from './component/elaborator-lobby/elaborator-lobby.component';
+import { ElaboratorLobbyComponent } from './component/elaborator-lobby/elaborator-lobby.container.component';
 import { ElaboratorQuestionComponent } from './component/elaborator-question/elaborator-question.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +14,8 @@ import { StoreModule } from '@ngrx/store';
 import { ElaboratorEffect, ElaboratorState, elaboratorReducer } from './state';
 import { EffectsModule } from '@ngrx/effects';
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import { ElabratorResultComponent } from './component/elabrator-result/elabrator-result.component';
+import { MatListModule } from '@angular/material/list';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -24,6 +26,7 @@ export interface AppState {
     AppComponent,
     ElaboratorLobbyComponent,
     ElaboratorQuestionComponent,
+    ElabratorResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +37,7 @@ export interface AppState {
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatButtonModule,
+    MatListModule,
     HighlightModule,
     StoreModule.forRoot({ elaborator: elaboratorReducer }),
     EffectsModule.forRoot([ElaboratorEffect]),

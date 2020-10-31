@@ -1,0 +1,12 @@
+<sk-elaborator-question
+  *ngIf="!isLoadingQuestion"
+  [question]="question"
+  [currentQuestionNumber]="currentQuestionNumber"
+  [maxQuestionCount]="maxQuestionCount"
+  [readOnly]="readOnlyMode"
+  [selectedAndRightAnswer]="selectedAndRightAnswer"
+  (nextQuestionClick)="getNextQuestion($event)"
+  (elaborationFinished)="onElaborationFinished()"
+></sk-elaborator-question>
+
+<mat-spinner *ngIf="isLoadingQuestion"></mat-spinner>

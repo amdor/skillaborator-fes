@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ElaboratorLobbyComponent } from './elaborator-lobby.component';
+import { ElaboratorLobbyComponent } from './elaborator-lobby.container.component';
 
 describe('ElaboratorLobbyComponent', () => {
   let component: ElaboratorLobbyComponent;

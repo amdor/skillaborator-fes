@@ -8,6 +8,7 @@
   <mat-radio-group
     aria-labelledby="elaborator-question-question"
     class="elaborator-question-answer-group"
+    [disabled]="readOnly"
     (change)="onSelect($event)"
     required
   >

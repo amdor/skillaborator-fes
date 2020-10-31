@@ -4,11 +4,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { ElaboratorAction } from './elaborator.action';
 import { ElaboratorService } from '../../service';
-import { Question } from '../../component/elaborator-question.model';
+import {
+  Question,
+  SelectedAndRightAnswer,
+} from '../../component/elaborator-question.model';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app';
-import { getQuestions } from './elaborator.selector';
+import { getQuestions, getSelectedAnswers } from './elaborator.selector';
 
 @Injectable()
 export class ElaboratorEffect {
@@ -31,6 +34,24 @@ export class ElaboratorEffect {
           catchError((err) => {
             console.error(JSON.stringify(err));
             return of(ElaboratorAction.getQuestionFail());
+          })
+        )
+      )
+    )
+  );
+
+  evaluateAnswers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ElaboratorAction.evaluateAnswers),
+      withLatestFrom(this.store.select(getSelectedAnswers)),
+      mergeMap(([, selectedAnswers]) =>
+        this.service.postSelectedAnswers(selectedAnswers).pipe(
+          map((selectedAnswersResponse: SelectedAndRightAnswer[]) =>
+            ElaboratorAction.evaluateAnswersSuccess(selectedAnswersResponse)
+          ),
+          catchError((err) => {
+            console.error(JSON.stringify(err));
+            return of(ElaboratorAction.evaluateAnswersFail());
           })
         )
       )
