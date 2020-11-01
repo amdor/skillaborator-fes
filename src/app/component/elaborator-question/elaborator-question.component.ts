@@ -33,14 +33,14 @@ export class ElaboratorQuestionComponent {
   @Input()
   currentQuestionNumber = 1;
 
-  @Input() maxQuestionCount;
+  @Input() maxQuestionCount = 1;
 
   @Input()
   get readOnly(): boolean {
     return this._readOnly;
   }
 
-  set readonly(newVal: boolean) {
+  set readOnly(newVal: boolean) {
     this._readOnly = coerceBooleanProperty(newVal);
   }
 
@@ -50,22 +50,27 @@ export class ElaboratorQuestionComponent {
   @Output()
   nextQuestionClick = new EventEmitter<string>();
 
+  @Output()
+  elaborationFinished = new EventEmitter<string>();
+
   private selectedAnswerId: string | undefined;
   private _readOnly: boolean;
 
   constructor(private snackBar: MatSnackBar, configService: ConfigService) {}
+
+  isRight(id: string) {
+    return id === this.selectedAndRightAnswer?.rightAnswerId;
+  }
 
   onSelect(change: MatRadioChange) {
     this.selectedAnswerId = change.value;
   }
 
   onNextClick() {
-    if (this.selectedAnswerId) {
-      this.nextQuestionClick.emit(this.selectedAnswerId);
-      return;
-    }
-    this.snackBar.open('Select an answer please', 'OK', {
-      duration: 2000,
-    });
+    this.nextQuestionClick.emit(this.selectedAnswerId);
+  }
+
+  onEvaluate() {
+    this.elaborationFinished.emit(this.selectedAnswerId);
   }
 }

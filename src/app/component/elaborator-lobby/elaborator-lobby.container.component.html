@@ -6,7 +6,7 @@
   [readOnly]="readOnlyMode"
   [selectedAndRightAnswer]="selectedAndRightAnswer"
   (nextQuestionClick)="getNextQuestion($event)"
-  (elaborationFinished)="onElaborationFinished()"
+  (elaborationFinished)="onElaborationFinished($event)"
 ></sk-elaborator-question>
 
 <mat-spinner *ngIf="isLoadingQuestion"></mat-spinner>

@@ -16,6 +16,13 @@
       class="elaborator-question-answer"
       *ngFor="let answer of question?.answers"
       [value]="answer.id"
+      [checked]="answer.id === selectedAndRightAnswer?.answerId"
+      [ngClass]="{
+        'right-answer': answer.id === selectedAndRightAnswer?.rightAnswerId,
+        'wrong-answer':
+          answer.id === selectedAndRightAnswer?.answerId &&
+          answer.id !== selectedAndRightAnswer?.rightAnswerId
+      }"
     >
       <span>{{ answer.value }}</span>
     </mat-radio-button>
@@ -34,11 +41,23 @@
     >{{ currentQuestionNumber }}/{{ maxQuestionCount }}</span
   >
   <button
+    *ngIf="currentQuestionNumber !== maxQuestionCount"
     class="elaborator-question-next-button"
     mat-raised-button
     color="primary"
+    [disabled]="!selectedAnswerId && !readOnly"
     (click)="onNextClick()"
   >
     Next question
+  </button>
+  <button
+    *ngIf="currentQuestionNumber === maxQuestionCount"
+    class="elaborator-question-next-button"
+    mat-raised-button
+    color="primary"
+    [disabled]="!selectedAnswerId && !readOnly"
+    (click)="onEvaluate()"
+  >
+    Evaluate
   </button>
 </div>

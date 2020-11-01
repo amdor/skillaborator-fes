@@ -7,7 +7,7 @@ export const environment = {
   apiUrl: 'http://localhost:5000',
   questionEndpoint: '/question',
   selectedAnswersEndpoint: '/selectedAnswers',
-  maxQuestionCount: 10,
+  maxQuestionCount: 2,
 };
 
 /*

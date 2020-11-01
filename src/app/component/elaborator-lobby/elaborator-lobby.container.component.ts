@@ -22,7 +22,7 @@ import {
   ANSWER_IDS_STORAGE_KEY,
   ConfigService,
 } from './../../service';
-import { tap, take } from 'rxjs/operators';
+import { tap, take, filter } from 'rxjs/operators';
 import {
   getSelectedAndRightAnswers,
   getQuestions,
@@ -93,30 +93,32 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
       // TODO this.cdRef.markForCheck();?
       return;
     }
-    this.saveAnswerToLocal(selectedAnswerId);
-    this.store.dispatch(
-      ElaboratorAction.saveSelectedAnswer({
-        questionId: this.question.id,
-        answerId: selectedAnswerId,
-      })
-    );
 
-    if (this.currentQuestionNumber !== this.maxQuestionCount) {
+    this.saveAnswer(selectedAnswerId);
+
+    if (this.currentQuestionNumber <= this.maxQuestionCount) {
       this.store.dispatch(ElaboratorAction.getQuestion());
       return;
     }
   }
 
-  onElaborationFinished() {
+  onElaborationFinished(selectedAnswerId: string) {
     if (this.readOnlyMode) {
       // TODO what happens after review has finished?
       return;
     }
+    this.saveAnswer(selectedAnswerId);
     combineLatest([
       this.store.select(getSelectedAndRightAnswers),
       this.store.select(getQuestions),
     ])
-      .pipe(take(1))
+      .pipe(
+        filter(
+          ([selectedAndRightAnswers, questions]) =>
+            !!selectedAndRightAnswers && !!questions
+        ),
+        take(1)
+      )
       .subscribe(
         ([selectedAndRightAnswers, questions]: [
           SelectedAndRightAnswer[],
@@ -155,6 +157,16 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   private getCurrentSelectedAndRightAnswer(): SelectedAndRightAnswer {
     return this.selectedAndRightAnswers.find(
       (answer: SelectedAndRightAnswer) => this.question.id === answer.questionId
+    );
+  }
+
+  private saveAnswer(selectedAnswerId: string) {
+    this.saveAnswerToLocal(selectedAnswerId);
+    this.store.dispatch(
+      ElaboratorAction.saveSelectedAnswer({
+        questionId: this.question.id,
+        answerId: selectedAnswerId,
+      })
     );
   }
 }

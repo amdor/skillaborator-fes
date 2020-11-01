@@ -25,7 +25,7 @@ export class ElaboratorService {
     const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
     return this.httpClient.post<SelectedAndRightAnswer[]>(
       selectedAnswersEndpoint,
-      selectedAnswers
+      { selectedAnswers }
     );
   }
 }
