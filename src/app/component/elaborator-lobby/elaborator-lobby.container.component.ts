@@ -13,7 +13,7 @@ import {
   ElaboratorAction,
   getLoadingCurrentQuestion,
 } from 'src/app/state';
-import { Subscription, Observable, merge, combineLatest } from 'rxjs';
+import { Subscription, merge, combineLatest } from 'rxjs';
 import { Question, SelectedAndRightAnswer } from '../elaborator-question.model';
 import { AppState } from './../../app.module';
 import {
@@ -27,6 +27,7 @@ import {
   getSelectedAndRightAnswers,
   getQuestions,
 } from 'src/app/state/elaborator/elaborator.selector';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sk-elaborator-lobby',
@@ -52,6 +53,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private cdRef: ChangeDetectorRef,
+    private router: Router,
     configService: ConfigService
   ) {
     this.maxQuestionCount = configService.getMaxQuestionsCount();
@@ -90,7 +92,6 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     if (this.readOnlyMode) {
       this.question = this.questions[this.currentQuestionNumber - 1];
       this.selectedAndRightAnswer = this.getCurrentSelectedAndRightAnswer();
-      // TODO this.cdRef.markForCheck();?
       return;
     }
 
@@ -103,10 +104,10 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   onElaborationFinished(selectedAnswerId: string) {
-    if (this.readOnlyMode) {
-      // TODO what happens after review has finished?
-      return;
-    }
+    // if (this.readOnlyMode) {
+    //   // TODO what happens after review has finished?
+    //   return;
+    // }
     this.saveAnswer(selectedAnswerId);
     combineLatest([
       this.store.select(getSelectedAndRightAnswers),
@@ -134,7 +135,8 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
         }
       );
     this.store.dispatch(ElaboratorAction.evaluateAnswers());
-    this.readOnlyMode = !this.readOnlyMode;
+    // this.readOnlyMode = !this.readOnlyMode;
+    this.router.navigate(['/review']);
   }
 
   // TODO use this for sg....

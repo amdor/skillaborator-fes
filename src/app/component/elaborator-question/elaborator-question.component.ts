@@ -44,7 +44,6 @@ export class ElaboratorQuestionComponent {
     this._readOnly = coerceBooleanProperty(newVal);
   }
 
-  // TODO readonly mode in HTML
   @Input() selectedAndRightAnswer: SelectedAndRightAnswer;
 
   @Output()
