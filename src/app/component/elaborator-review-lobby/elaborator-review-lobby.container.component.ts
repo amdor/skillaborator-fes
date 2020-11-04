@@ -25,6 +25,7 @@ import {
   getQuestions,
 } from '../..';
 import { getSelectedAndRightAnswers } from '../../state/elaborator/elaborator.selector';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'sk-elaborator-review-lobby',
@@ -37,22 +38,26 @@ export class ElaboratorReviewLobbyComponent implements OnInit {
   @HostBinding('class.elaborator-review-lobby') hostCss = true;
 
   questions: Question[];
-  selectedAndRightAnswer: SelectedAndRightAnswer;
+  selectedAndRightAnswers: Map<string, SelectedAndRightAnswer>;
   questionPreview: false;
-
-  private selectedAndRightAnswers: SelectedAndRightAnswer[];
 
   constructor(
     private store: Store<AppState>,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    combineLatest([
+    const sub = combineLatest([
       this.store.select(getSelectedAndRightAnswers),
       this.store.select(getQuestions),
     ])
       .pipe(
+        tap(([, questions]) => {
+          if (!questions?.length) {
+            this.router.navigate(['']);
+          }
+        }),
         filter(
           ([selectedAndRightAnswers, questions]) =>
             !!selectedAndRightAnswers && !!questions
@@ -64,16 +69,16 @@ export class ElaboratorReviewLobbyComponent implements OnInit {
           SelectedAndRightAnswer[],
           Question[]
         ]) => {
-          this.selectedAndRightAnswers = selectedAndRightAnswers;
+          this.selectedAndRightAnswers = new Map();
+          selectedAndRightAnswers.forEach((selectedAndRightAnswer) => {
+            this.selectedAndRightAnswers.set(
+              selectedAndRightAnswer.questionId,
+              selectedAndRightAnswer
+            );
+          });
           this.questions = questions;
           this.cdRef.markForCheck();
         }
       );
-  }
-
-  private getSelectedAndRightAnswer(question: Question): SelectedAndRightAnswer {
-    return this.selectedAndRightAnswers.find(
-      (answer: SelectedAndRightAnswer) => question.id === answer.questionId
-    );
   }
 }

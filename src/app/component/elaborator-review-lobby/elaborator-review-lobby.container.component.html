@@ -1,32 +1,36 @@
-<!-- <ng-container *ngIf="questionPreview">
-  <button class="elaborator-question-previous-button" mat-raised-button>
-    Answer review
-  </button>
-
-  <sk-elaborator-question
-    *ngIf="!isLoadingQuestion"
-    [question]="question"
-    [currentQuestionNumber]="currentQuestionNumber"
-    [readOnly]="readOnlyMode"
-    [selectedAndRightAnswer]="selectedAndRightAnswer"
-    (nextQuestionClick)="getNextQuestion($event)"
-    (elaborationFinished)="onElaborationFinished($event)"
-  ></sk-elaborator-question>
-</ng-container> -->
-
 <mat-accordion>
   <mat-expansion-panel *ngFor="let question of questions; index as i">
     <mat-expansion-panel-header>
       <mat-panel-title> {{ i }}. {{ question.value }} </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon
+          *ngIf="
+            selectedAndRightAnswers?.get(question.id).rightAnswerId ===
+            selectedAndRightAnswers?.get(question.id).answerId
+          "
+          class="right-answer"
+          svgIcon="done"
+          aria-hidden="false"
+          aria-label="Good answer icon"
+        ></mat-icon>
+        <mat-icon
+          *ngIf="
+            selectedAndRightAnswers?.get(question.id).rightAnswerId !==
+            selectedAndRightAnswers?.get(question.id).answerId
+          "
+          class="wrong-answer"
+          svgIcon="close"
+          aria-hidden="false"
+          aria-label="Bad answer icon"
+        ></mat-icon>
+      </mat-panel-description>
     </mat-expansion-panel-header>
 
     <ng-template matExpansionPanelContent>
       <sk-elaborator-question
         [question]="question"
         [currentQuestionNumber]="i"
-        [selectedAndRightAnswer]="selectedAndRightAnswer"
-        (nextQuestionClick)="getNextQuestion($event)"
-        (elaborationFinished)="onElaborationFinished($event)"
+        [selectedAndRightAnswer]="selectedAndRightAnswers?.get(question.id)"
         readOnly
       ></sk-elaborator-question>
     </ng-template>

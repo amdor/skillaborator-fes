@@ -18,6 +18,7 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { ElabratorResultComponent } from './component/elabrator-result/elabrator-result.component';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -43,6 +44,7 @@ export interface AppState {
     MatListModule,
     HighlightModule,
     MatExpansionModule,
+    MatIconModule,
     StoreModule.forRoot({ elaborator: elaboratorReducer }),
     EffectsModule.forRoot([ElaboratorEffect]),
   ],

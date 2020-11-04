@@ -2,7 +2,22 @@
   display: flex;
   justify-content: center;
   height: 100%;
-  mat-spinner {
-    margin: auto;
+
+  .mat-expansion-panel-header-description {
+    flex-grow: 0;
+  }
+
+  .right-answer {
+    svg {
+      fill: green;
+      color: green;
+    }
+  }
+
+  .wrong-answer {
+    svg {
+      fill: red;
+      color: red;
+    }
   }
 }
