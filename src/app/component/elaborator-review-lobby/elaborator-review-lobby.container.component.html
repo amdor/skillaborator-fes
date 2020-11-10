@@ -1,23 +1,17 @@
-<mat-accordion>
+<mat-accordion class="elaborator-review-lobby-accordion">
   <mat-expansion-panel *ngFor="let question of questions; index as i">
     <mat-expansion-panel-header>
       <mat-panel-title> {{ i }}. {{ question.value }} </mat-panel-title>
       <mat-panel-description>
         <mat-icon
-          *ngIf="
-            selectedAndRightAnswers?.get(question.id).rightAnswerId ===
-            selectedAndRightAnswers?.get(question.id).answerId
-          "
+          *ngIf="isRightAnswerSelected(question)"
           class="right-answer"
           svgIcon="done"
           aria-hidden="false"
           aria-label="Good answer icon"
         ></mat-icon>
         <mat-icon
-          *ngIf="
-            selectedAndRightAnswers?.get(question.id).rightAnswerId !==
-            selectedAndRightAnswers?.get(question.id).answerId
-          "
+          *ngIf="!isRightAnswerSelected(question)"
           class="wrong-answer"
           svgIcon="close"
           aria-hidden="false"
@@ -30,7 +24,9 @@
       <sk-elaborator-question
         [question]="question"
         [currentQuestionNumber]="i"
-        [selectedAndRightAnswer]="selectedAndRightAnswers?.get(question.id)"
+        [selectedAndRightAnswer]="
+          selectedAndRightAnswers?.get(question.questionId)
+        "
         readOnly
       ></sk-elaborator-question>
     </ng-template>

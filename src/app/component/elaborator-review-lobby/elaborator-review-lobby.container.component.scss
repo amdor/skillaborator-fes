@@ -3,6 +3,13 @@
   justify-content: center;
   height: 100%;
 
+  &-accordion {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+  }
+
   .mat-expansion-panel-header-description {
     flex-grow: 0;
   }

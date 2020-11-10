@@ -81,4 +81,11 @@ export class ElaboratorReviewLobbyComponent implements OnInit {
         }
       );
   }
+
+  isRightAnswerSelected(question: Question): boolean {
+    return (
+      this.selectedAndRightAnswers?.get(question.questionId).rightAnswerId ===
+      this.selectedAndRightAnswers?.get(question.questionId).answerId
+    );
+  }
 }
