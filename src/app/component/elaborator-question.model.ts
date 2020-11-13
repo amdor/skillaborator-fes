@@ -3,6 +3,7 @@ export interface Question {
   value: string;
   answers: Answer[];
   level: number;
+  multi: boolean;
   code?: Code;
 }
 
@@ -13,11 +14,11 @@ export interface Answer {
 
 export interface SelectedAnswer {
   questionId: string;
-  answerId: string;
+  answerIds: string[];
 }
 
 export interface SelectedAndRightAnswer extends SelectedAnswer {
-  rightAnswerId: string;
+  rightAnswerIds: string[];
 }
 
 export interface Code {

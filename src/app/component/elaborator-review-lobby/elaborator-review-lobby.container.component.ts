@@ -82,10 +82,21 @@ export class ElaboratorReviewLobbyComponent implements OnInit {
       );
   }
 
-  isRightAnswerSelected(question: Question): boolean {
+  rightAnswersSelected(question: Question): boolean {
+    const rightAnswerIds =
+      this.selectedAndRightAnswers?.get(question.id).rightAnswerIds ?? [];
+    const selectedAnswerIds =
+      [...this.selectedAndRightAnswers?.get(question.id).answerIds] ?? [];
     return (
-      this.selectedAndRightAnswers?.get(question.questionId).rightAnswerId ===
-      this.selectedAndRightAnswers?.get(question.questionId).answerId
+      rightAnswerIds.length === selectedAnswerIds.length &&
+      rightAnswerIds.every((rightAnswerId) => {
+        const indexOfRightAnswer = selectedAnswerIds.indexOf(rightAnswerId);
+        if (indexOfRightAnswer === -1) {
+          return false;
+        }
+        selectedAnswerIds.splice(indexOfRightAnswer, 1);
+        return true;
+      })
     );
   }
 }

@@ -1,33 +1,55 @@
 <label class="elaborator-question-question mat-headline">
-  {{ question?.value }}
+  {{ question.value }}
 </label>
-<pre *ngIf="question?.code">
+<pre *ngIf="question.code">
   <code [highlight]="question.code.value" [languages]="[question.code.language]"></code>
 </pre>
 <div class="elaborator-question-content">
   <mat-radio-group
+    *ngIf="!question.multi"
     aria-labelledby="elaborator-question-question"
     class="elaborator-question-answer-group"
     [disabled]="readOnly"
-    (change)="onSelect($event)"
+    (change)="onRadioSelect($event)"
     required
   >
     <mat-radio-button
       class="elaborator-question-answer"
-      *ngFor="let answer of question?.answers"
+      *ngFor="let answer of question.answers"
       [value]="answer.id"
-      [checked]="answer.id === selectedAndRightAnswer?.answerId"
+      [checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
       [ngClass]="{
-        'right-answer': answer.id === selectedAndRightAnswer?.rightAnswerId,
+        'right-answer': isRight(answer.id),
         'wrong-answer':
-          answer.id === selectedAndRightAnswer?.answerId &&
-          answer.id !== selectedAndRightAnswer?.rightAnswerId,
+          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+          !isRight(answer.id),
         'read-only': readOnly
       }"
     >
       <span>{{ answer.value }}</span>
     </mat-radio-button>
   </mat-radio-group>
+
+  <ul *ngIf="question.multi" class="elaborator-question-answer-group">
+    <li *ngFor="let answer of question.answers">
+      <mat-checkbox
+        class="elaborator-question-answer"
+        [value]="answer.id"
+        [checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
+        [disabled]="readOnly"
+        [ngClass]="{
+          'right-answer': isRight(answer.id),
+          'wrong-answer':
+            selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+            !isRight(answer.id),
+          'read-only': readOnly
+        }"
+        (change)="onCheckboxSelect($event, answer.id)"
+      >
+        <span>{{ answer.value }}</span>
+      </mat-checkbox>
+    </li>
+  </ul>
 </div>
 <div class="elaborator-question-footer" *ngIf="!readOnly">
   <!-- TODO back -->
@@ -40,7 +62,7 @@
     class="elaborator-question-next-button"
     mat-raised-button
     color="primary"
-    [disabled]="!selectedAnswerId"
+    [disabled]="!selectedAnswerIds.length"
     (click)="onNextClick()"
   >
     Next question
@@ -50,7 +72,7 @@
     class="elaborator-question-next-button"
     mat-raised-button
     color="primary"
-    [disabled]="!selectedAnswerId"
+    [disabled]="!selectedAnswerIds.length"
     (click)="onEvaluate()"
   >
     Evaluate

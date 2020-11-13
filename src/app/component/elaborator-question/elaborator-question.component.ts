@@ -16,6 +16,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfigService } from '../../service';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'sk-elaborator-question',
@@ -47,29 +48,44 @@ export class ElaboratorQuestionComponent {
   @Input() selectedAndRightAnswer: SelectedAndRightAnswer;
 
   @Output()
-  nextQuestionClick = new EventEmitter<string>();
+  nextQuestionClick = new EventEmitter<string[]>();
 
   @Output()
-  elaborationFinished = new EventEmitter<string>();
+  elaborationFinished = new EventEmitter<string[]>();
 
-  private selectedAnswerId: string | undefined;
+  private selectedAnswerIds: string[] = [];
   private _readOnly: boolean;
 
-  constructor(private snackBar: MatSnackBar, configService: ConfigService) {}
+  constructor() {}
 
-  isRight(id: string) {
-    return id === this.selectedAndRightAnswer?.rightAnswerId;
+  isRight(answerId: string) {
+    return this.selectedAndRightAnswer?.rightAnswerIds.includes(answerId);
   }
 
-  onSelect(change: MatRadioChange) {
-    this.selectedAnswerId = change.value;
+  onRadioSelect({ value: selectedAnswerId }: MatRadioChange) {
+    if (!this.question.multi) {
+      this.selectedAnswerIds = [selectedAnswerId];
+      return;
+    }
+  }
+
+  onCheckboxSelect(event: MatCheckboxChange) {
+    const selectedAnswerId = event.source.value;
+    if (event.checked) {
+      this.selectedAnswerIds.push(selectedAnswerId);
+      return;
+    }
+    this.selectedAnswerIds.splice(
+      this.selectedAnswerIds.indexOf(selectedAnswerId),
+      1
+    );
   }
 
   onNextClick() {
-    this.nextQuestionClick.emit(this.selectedAnswerId);
+    this.nextQuestionClick.emit(this.selectedAnswerIds);
   }
 
   onEvaluate() {
-    this.elaborationFinished.emit(this.selectedAnswerId);
+    this.elaborationFinished.emit(this.selectedAnswerIds);
   }
 }

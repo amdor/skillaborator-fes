@@ -40,15 +40,12 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   @HostBinding('class.elaborator-lobby') hostCss = true;
 
   question: Question | undefined;
-  selectedAndRightAnswer: SelectedAndRightAnswer;
   isLoadingQuestion = true;
   currentQuestionNumber = 1;
   readOnlyMode = false;
   readonly maxQuestionCount: number;
 
   private data$$: Subscription;
-  private selectedAndRightAnswers: SelectedAndRightAnswer[];
-  private questions: Question[];
 
   constructor(
     private store: Store<AppState>,
@@ -86,16 +83,9 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     this.data$$?.unsubscribe();
   }
 
-  getNextQuestion(selectedAnswerId: string) {
+  getNextQuestion(selectedAnswerIds: string[]) {
     this.currentQuestionNumber++;
-
-    if (this.readOnlyMode) {
-      this.question = this.questions[this.currentQuestionNumber - 1];
-      this.selectedAndRightAnswer = this.getCurrentSelectedAndRightAnswer();
-      return;
-    }
-
-    this.saveAnswer(selectedAnswerId);
+    this.saveAnswer(selectedAnswerIds);
 
     if (this.currentQuestionNumber <= this.maxQuestionCount) {
       this.store.dispatch(ElaboratorAction.getQuestion());
@@ -103,51 +93,21 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     }
   }
 
-  onElaborationFinished(selectedAnswerId: string) {
-    // if (this.readOnlyMode) {
-    //   // TODO what happens after review has finished?
-    //   return;
-    // }
-    this.saveAnswer(selectedAnswerId);
-    combineLatest([
-      this.store.select(getSelectedAndRightAnswers),
-      this.store.select(getQuestions),
-    ])
-      .pipe(
-        filter(
-          ([selectedAndRightAnswers, questions]) =>
-            !!selectedAndRightAnswers && !!questions
-        ),
-        take(1)
-      )
-      .subscribe(
-        ([selectedAndRightAnswers, questions]: [
-          SelectedAndRightAnswer[],
-          Question[]
-        ]) => {
-          this.selectedAndRightAnswers = selectedAndRightAnswers;
-          this.questions = questions;
-
-          this.currentQuestionNumber = 1;
-          this.question = questions[0];
-          this.selectedAndRightAnswer = this.getCurrentSelectedAndRightAnswer();
-          this.cdRef.markForCheck();
-        }
-      );
+  onElaborationFinished(selectedAnswerIds: string[]) {
+    this.saveAnswer(selectedAnswerIds);
     this.store.dispatch(ElaboratorAction.evaluateAnswers());
-    // this.readOnlyMode = !this.readOnlyMode;
     this.router.navigate(['/review']);
   }
 
   // TODO use this for sg....
-  private saveAnswerToLocal(selectedAnswerId: string) {
+  private saveAnswerToLocal(selectedAnswerIds: string[]) {
     const previousQuestionIds =
       LocalStorageService.getForKey(QUESTION_IDS_STORAGE_KEY) ?? [];
     const previousAnswerIds =
       LocalStorageService.getForKey(ANSWER_IDS_STORAGE_KEY) ?? [];
 
     previousQuestionIds.push(this.question.id);
-    previousAnswerIds.push(selectedAnswerId);
+    previousAnswerIds.push(selectedAnswerIds);
 
     LocalStorageService.setForKey(
       QUESTION_IDS_STORAGE_KEY,
@@ -156,18 +116,12 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     LocalStorageService.setForKey(ANSWER_IDS_STORAGE_KEY, previousAnswerIds);
   }
 
-  private getCurrentSelectedAndRightAnswer(): SelectedAndRightAnswer {
-    return this.selectedAndRightAnswers.find(
-      (answer: SelectedAndRightAnswer) => this.question.id === answer.questionId
-    );
-  }
-
-  private saveAnswer(selectedAnswerId: string) {
-    this.saveAnswerToLocal(selectedAnswerId);
+  private saveAnswer(selectedAnswerIds: string[]) {
+    this.saveAnswerToLocal(selectedAnswerIds);
     this.store.dispatch(
       ElaboratorAction.saveSelectedAnswer({
         questionId: this.question.id,
-        answerId: selectedAnswerId,
+        answerIds: selectedAnswerIds,
       })
     );
   }

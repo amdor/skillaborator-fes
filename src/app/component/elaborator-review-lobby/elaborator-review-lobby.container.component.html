@@ -3,15 +3,16 @@
     <mat-expansion-panel-header>
       <mat-panel-title> {{ i }}. {{ question.value }} </mat-panel-title>
       <mat-panel-description>
+        <!-- TODO missed right answer -->
         <mat-icon
-          *ngIf="isRightAnswerSelected(question)"
+          *ngIf="rightAnswersSelected(question)"
           class="right-answer"
           svgIcon="done"
           aria-hidden="false"
           aria-label="Good answer icon"
         ></mat-icon>
         <mat-icon
-          *ngIf="!isRightAnswerSelected(question)"
+          *ngIf="!rightAnswersSelected(question)"
           class="wrong-answer"
           svgIcon="close"
           aria-hidden="false"
@@ -24,9 +25,7 @@
       <sk-elaborator-question
         [question]="question"
         [currentQuestionNumber]="i"
-        [selectedAndRightAnswer]="
-          selectedAndRightAnswers?.get(question.questionId)
-        "
+        [selectedAndRightAnswer]="selectedAndRightAnswers?.get(question.id)"
         readOnly
       ></sk-elaborator-question>
     </ng-template>

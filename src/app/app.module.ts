@@ -19,6 +19,7 @@ import { ElabratorResultComponent } from './component/elabrator-result/elabrator
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -45,6 +46,7 @@ export interface AppState {
     HighlightModule,
     MatExpansionModule,
     MatIconModule,
+    MatCheckboxModule,
     StoreModule.forRoot({ elaborator: elaboratorReducer }),
     EffectsModule.forRoot([ElaboratorEffect]),
   ],
