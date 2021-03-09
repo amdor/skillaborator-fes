@@ -5,9 +5,10 @@
   <span *ngIf="question.code" class="elaborator-question-code-language">
     {{ question.code.language }}
   </span>
+  <sk-countdown-clock></sk-countdown-clock>
 </div>
 <pre *ngIf="question.code">
-  <code [ngClass]="codeLanguage" class="elaborator-question-code-value">{{question?.code.value}}</code>
+  <code [ngClass]="codeLanguage" class="elaborator-question-code-value unselectable">{{question?.code.value}}</code>
 </pre>
 <div class="elaborator-question-content">
   <mat-radio-group
