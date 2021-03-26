@@ -48,6 +48,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.dispatch(ElaboratorAction.reset())
     this.store.dispatch(ElaboratorAction.getQuestion());
 
     const getCurrentQuestion$ = this.store.select(getCurrentQuestion).pipe(

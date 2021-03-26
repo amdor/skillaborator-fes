@@ -2,7 +2,7 @@ import {
   Question,
   SelectedAnswer,
 } from '../../component/elaborator-question.model';
-import { createReducer, on } from '@ngrx/store';
+import { createReducer, INITIAL_STATE, on } from '@ngrx/store';
 import { ElaboratorAction } from './elaborator.action';
 
 export interface ElaboratorState {
@@ -43,5 +43,6 @@ export const elaboratorReducer = createReducer(
         selectedAnswers: [...oldAnswers, selectedAnswer],
       };
     }
-  )
+  ),
+  on(ElaboratorAction.reset, () => initialState),
 );

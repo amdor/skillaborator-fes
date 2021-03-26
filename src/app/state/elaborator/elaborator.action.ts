@@ -45,4 +45,8 @@ export namespace ElaboratorAction {
   export const evaluateAnswersFail = createAction(
     `${ACTION_PREFIX} Evaluate Answers Fail`
   );
+
+  export const reset = createAction(
+    `${ACTION_PREFIX} Reset`
+  );
 }
