@@ -27,6 +27,7 @@
     "@ngrx/effects": "^11.0.1",
     "@ngrx/store": "^11.0.1",
     "chart.js": "^2.9.4",
+    "express": "^4.17.1",
     "highlight.js": "^10.6.0",
     "rxjs": "^6.5.5",
     "tslib": "^2.0.0",
