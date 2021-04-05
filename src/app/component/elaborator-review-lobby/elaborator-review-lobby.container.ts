@@ -64,12 +64,13 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
   private data$$: Subscription | undefined;
   private _scoreChart: ElementRef | undefined;
   private chart: Chart | undefined;
+  private readonly scoreBase = 10;
 
   constructor(
     private store: Store<AppState>,
     private cdRef: ChangeDetectorRef,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.data$$ = combineLatest([
@@ -94,48 +95,26 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
           number,
           Question[]
         ]) => {
-          this.selectedAndRightAnswersMap = new Map();
-
-          selectedAndRightAnswers.forEach((selectedAndRightAnswer) => {
-            let answerSummaryState;
-            const numberOfRightAndSelectedAnswers = this.intersect(
-              selectedAndRightAnswer.rightAnswerIds,
-              selectedAndRightAnswer.answerIds
-            ).length;
-
-            answerSummaryState =
-              numberOfRightAndSelectedAnswers === 0
-                ? AnswerSummaryState.Wrong
-                : numberOfRightAndSelectedAnswers ===
-                  selectedAndRightAnswer.rightAnswerIds.length &&
-                  selectedAndRightAnswer.rightAnswerIds.length ===
-                  selectedAndRightAnswer.answerIds.length
-                  ? AnswerSummaryState.Right
-                  : AnswerSummaryState.PartialWrong;
-
-            this.selectedAndRightAnswersMap.set(
-              selectedAndRightAnswer.questionId,
-              { ...selectedAndRightAnswer, answerSummaryState }
-            );
-          });
+          this.createSelectedAndRightAnswersMap(selectedAndRightAnswers);
           this.questions = questions;
           this.score = score;
           this.isLoading = false;
 
-          // TODO calibrated for 20 questions, make dynamic depending question count
+          const maxScore = this.getMaxScore(questions.length);
+
           this.professionalLevel =
-            score < 120
+            score < maxScore * 0.5
               ? ProfessionalLevel.Beginner
-              : score < 200
-                ? ProfessionalLevel.Medior
-                : ProfessionalLevel.Pro;
+              : score < 0.8
+              ? ProfessionalLevel.Medior
+              : ProfessionalLevel.Pro;
 
           this.scoreMessage =
             this.professionalLevel === ProfessionalLevel.Beginner
               ? 'You are at beginner level, keep learning!'
               : this.professionalLevel === ProfessionalLevel.Medior
-                ? 'Congratulations, you are at a professional level'
-                : 'Congratulations, you are a tech god emperor';
+              ? 'Congratulations, you are at a professional level'
+              : 'Congratulations, you are a tech god emperor';
 
           this.cdRef.markForCheck();
         }
@@ -160,6 +139,46 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
       intersection.push(elemA);
     });
     return intersection;
+  }
+
+  private getMaxScore(numberOfQuestions, depth = 0) {
+    const step = depth * 5;
+    if (depth > 2) {
+      return Math.max(numberOfQuestions - 15, 0) * 14;
+    }
+    return (
+      this.getMaxScore(numberOfQuestions, depth + 1) +
+      Math.max(Math.min(numberOfQuestions, step + 5) - step, 0) * (11 + depth)
+    );
+  }
+
+  private createSelectedAndRightAnswersMap(
+    selectedAndRightAnswers: SelectedAndRightAnswer[]
+  ) {
+    this.selectedAndRightAnswersMap = new Map();
+
+    selectedAndRightAnswers.forEach((selectedAndRightAnswer) => {
+      let answerSummaryState;
+      const numberOfRightAndSelectedAnswers = this.intersect(
+        selectedAndRightAnswer.rightAnswerIds,
+        selectedAndRightAnswer.answerIds
+      ).length;
+
+      answerSummaryState =
+        numberOfRightAndSelectedAnswers === 0
+          ? AnswerSummaryState.Wrong
+          : numberOfRightAndSelectedAnswers ===
+              selectedAndRightAnswer.rightAnswerIds.length &&
+            selectedAndRightAnswer.rightAnswerIds.length ===
+              selectedAndRightAnswer.answerIds.length
+          ? AnswerSummaryState.Right
+          : AnswerSummaryState.PartialWrong;
+
+      this.selectedAndRightAnswersMap.set(selectedAndRightAnswer.questionId, {
+        ...selectedAndRightAnswer,
+        answerSummaryState,
+      });
+    });
   }
 
   private loadScoreChart() {
