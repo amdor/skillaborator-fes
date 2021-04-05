@@ -42,8 +42,8 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 
   @ViewChild('scoreChart') set scoreChart(scoreChart: ElementRef) {
     this._scoreChart = scoreChart;
-    if (scoreChart) {
-      this.loadScoreChart();
+    if (scoreChart && this.maxScore) {
+      this.loadScoreChart(this.maxScore);
     }
   }
 
@@ -64,6 +64,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
   private data$$: Subscription | undefined;
   private _scoreChart: ElementRef | undefined;
   private chart: Chart | undefined;
+  private maxScore: number;
   private readonly scoreBase = 10;
 
   constructor(
@@ -100,12 +101,12 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
           this.score = score;
           this.isLoading = false;
 
-          const maxScore = this.getMaxScore(questions.length);
+          this.maxScore = this.getMaxScore(questions.length);
 
           this.professionalLevel =
-            score < maxScore * 0.5
+            score < this.maxScore * 0.5
               ? ProfessionalLevel.Beginner
-              : score < 0.8
+              : score < this.maxScore * 0.8
               ? ProfessionalLevel.Medior
               : ProfessionalLevel.Pro;
 
@@ -141,7 +142,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
     return intersection;
   }
 
-  private getMaxScore(numberOfQuestions, depth = 0) {
+  private getMaxScore(numberOfQuestions: number, depth = 0) {
     const step = depth * 5;
     if (depth > 2) {
       return Math.max(numberOfQuestions - 15, 0) * 14;
@@ -181,16 +182,15 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadScoreChart() {
+  private loadScoreChart(maxScore: number) {
     // prettier-ignore
-    // 1/(20*sqrt(2*pi))*e^(-1/2*((x-180)/30)^2)*10^4
     const labels = ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200', '220', '240', '260', '280'];
     // prettier-ignore
     const data: Chart.ChartData = {
       labels,
       datasets: [
         {
-          data: [0, 0.00013, 0.003, 0.067, 0.77, 5.7, 27, 82, 159, 199.5, 159, 82, 27, 5.7, 0.77, 0.067],
+          data: this.getData(maxScore),
           radius: (context) => {
             const index = context.dataIndex;
             const xValue = Number(labels[index]);
@@ -224,5 +224,17 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
         hover: { mode: null },
       },
     });
+  }
+
+  // 1/(20*sqrt(2*pi))*e^(-1/2*((x-180)/30)^2)*10^4
+  // 1/(20*sqrt(2*pi))*e^(-1/2*((x-maxScore*0.6)/30)^2)*10^4
+  private getData(maxScore: number) {
+    const dataSetData = [];
+    for (let x = 0; x < 300; x += 20) {
+      // prettier-ignore
+      const currentData = ( Math.E ** (-0.5 * ( (x-maxScore*0.6)/30) ** 2 ) ) / (20 * Math.sqrt(2*Math.PI) ) * 10**4;
+      dataSetData.push(currentData);
+    }
+    return dataSetData;
   }
 }
