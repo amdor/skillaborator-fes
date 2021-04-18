@@ -21,7 +21,7 @@ import {
 } from '../../state';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js';
-import { ProfessionalLevel } from './elaborator-review-lobby.model';
+import { ProfessionalLevel } from './elaborator-review.model';
 
 enum AnswerSummaryState {
   Right,
@@ -30,15 +30,15 @@ enum AnswerSummaryState {
 }
 
 @Component({
-  selector: 'sk-elaborator-review-lobby',
-  templateUrl: './elaborator-review-lobby.container.html',
-  styleUrls: ['./elaborator-review-lobby.container.scss'],
+  selector: 'sk-elaborator-review',
+  templateUrl: './elaborator-review.container.html',
+  styleUrls: ['./elaborator-review.container.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
-  @HostBinding('class.elaborator-review-lobby') hostCss = true;
-  @HostBinding('class.elaborator-review-lobby-responsive') responsiveCss = true;
+  @HostBinding('class.elaborator-review') hostCss = true;
+  @HostBinding('class.elaborator-review-responsive') responsiveCss = true;
 
   @ViewChild('scoreChart') set scoreChart(scoreChart: ElementRef) {
     this._scoreChart = scoreChart;

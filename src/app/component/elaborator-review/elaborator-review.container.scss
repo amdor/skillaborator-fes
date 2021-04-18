@@ -1,19 +1,19 @@
 @import "~@angular/material/theming";
 
 @media only screen and (min-width: 768px) {
-  .elaborator-review-lobby.elaborator-review-lobby-responsive {
-    .elaborator-review-lobby-score-container,
-    .elaborator-review-lobby-score-chart-container {
+  .elaborator-review.elaborator-review-responsive {
+    .elaborator-review-score-container,
+    .elaborator-review-score-chart-container {
       width: 40%;
     }
 
-    .elaborator-review-lobby-accordion {
+    .elaborator-review-accordion {
       width: 60%;
     }
   }
 }
 
-.elaborator-review-lobby {
+.elaborator-review {
   height: 100%;
   display: flex;
   align-items: flex-start;

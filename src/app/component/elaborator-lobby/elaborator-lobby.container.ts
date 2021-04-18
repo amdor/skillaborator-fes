@@ -48,9 +48,6 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(ElaboratorAction.reset())
-    this.store.dispatch(ElaboratorAction.getQuestion());
-
     const getCurrentQuestion$ = this.store.select(getCurrentQuestion).pipe(
       tap((question: Question) => {
         this.question = question;
@@ -76,7 +73,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     this.currentQuestionNumber++;
     this.saveAnswer(selectedAnswerIds);
 
-    this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
+    // this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
   }
 
   onElaborationFinished(selectedAnswerIds: string[]) {

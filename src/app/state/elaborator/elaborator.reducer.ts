@@ -15,7 +15,7 @@ export interface ElaboratorState {
 const initialState = {
   currentQuestion: undefined,
   questions: [],
-  busy: true,
+  busy: false,
 };
 
 export const elaboratorReducer = createReducer(
@@ -43,6 +43,5 @@ export const elaboratorReducer = createReducer(
         selectedAnswers: [...oldAnswers, selectedAnswer],
       };
     }
-  ),
-  on(ElaboratorAction.reset, () => initialState),
+  )
 );

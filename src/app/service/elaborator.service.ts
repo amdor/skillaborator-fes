@@ -12,8 +12,10 @@ import { Observable } from 'rxjs';
 export class ElaboratorService {
   constructor(private httpClient: HttpClient, private config: ConfigService) {}
 
-  getQuestion(answerIds: string[]): Observable<Question> {
-    const questionEndpoint = this.config.getQuestionEndpoint();
+  getQuestion(answerIds: string[], oneTimeCode?: string): Observable<Question> {
+    const questionEndpoint = oneTimeCode
+      ? this.config.getQuestionEndpoint() + `/${oneTimeCode}`
+      : this.config.getQuestionEndpoint();
 
     let requestParams = new HttpParams();
 

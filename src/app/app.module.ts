@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ElaboratorLobbyComponent } from './component/elaborator-lobby/elaborator-lobby.container';
-import { ElaboratorReviewLobbyComponent } from './component/elaborator-review-lobby/elaborator-review-lobby.container';
+import { ElaboratorReviewLobbyComponent } from './component/elaborator-review/elaborator-review.container';
 import { ElaboratorQuestionComponent } from './component/elaborator-question/elaborator-question.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -24,6 +24,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { LobbyComponent } from './component/lobby/lobby.component';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NotificationComponent } from './component/notification/notification.component';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -36,9 +41,12 @@ export interface AppState {
     ElaboratorLobbyComponent,
     ElaboratorQuestionComponent,
     ElaboratorReviewLobbyComponent,
+    LobbyComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -50,6 +58,8 @@ export interface AppState {
     MatExpansionModule,
     MatIconModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
     StoreModule.forRoot({
       elaborator: elaboratorReducer,
       review: reviewReducer,
@@ -58,4 +68,4 @@ export interface AppState {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

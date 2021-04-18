@@ -14,20 +14,28 @@ import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app';
 import { getSelectedAnswers, getQuestions } from './elaborator.selector';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from 'src/app/component/notification/notification.service';
+import { NotificationType } from 'src/app/component/notification/notification.model';
 
 @Injectable()
 export class ElaboratorEffect {
   getQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ElaboratorAction.getQuestion),
-      mergeMap(({ selectedAnswerIds }) =>
-        this.service.getQuestion(selectedAnswerIds).pipe(
+      mergeMap(({ selectedAnswerIds, oneTimeCode }) =>
+        this.service.getQuestion(selectedAnswerIds, oneTimeCode).pipe(
           map((question: Question) => {
             const randomizedQuestion = this.randomize(question);
             return ElaboratorAction.getQuestionSuccess(randomizedQuestion);
           }),
-          catchError((err) => {
-            console.error(JSON.stringify(err));
+          catchError((err: HttpErrorResponse) => {
+            if (err.status === 401) {
+              this.notificationService.showNotification(
+                NotificationType.FAILURE,
+                'Session code is wrong/already used'
+              );
+            }
             return of(ElaboratorAction.getQuestionFail());
           })
         )
@@ -67,7 +75,6 @@ export class ElaboratorEffect {
             }
           ),
           catchError((err) => {
-            console.error(JSON.stringify(err));
             return of(ElaboratorAction.evaluateAnswersFail());
           })
         )
@@ -87,6 +94,7 @@ export class ElaboratorEffect {
   constructor(
     private actions$: Actions,
     private service: ElaboratorService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private notificationService: NotificationService
   ) {}
 }

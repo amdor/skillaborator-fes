@@ -1,31 +1,31 @@
 <a
   mat-raised-button
   color="primary"
-  class="elaborator-review-lobby-new-evaluation"
+  class="elaborator-review-new-evaluation"
   routerLink="/"
 >
   New evaluation
 </a>
-<div *ngIf="!isLoading" class="elaborator-review-lobby-container">
+<div *ngIf="!isLoading" class="elaborator-review-container">
   <div
-    class="elaborator-review-lobby-score-container"
+    class="elaborator-review-score-container"
     [ngClass]="{
       beginner: professionalLevel === professionalLevels.Beginner,
       medior: professionalLevel === professionalLevels.Medior,
       pro: professionalLevel === professionalLevels.Pro
     }"
   >
-    <span class="elaborator-review-lobby-score-container-score">
+    <span class="elaborator-review-score-container-score">
       {{ score }} points
     </span>
-    <span class="elaborator-review-lobby-score-container-message">
+    <span class="elaborator-review-score-container-message">
       {{ scoreMessage }}
     </span>
   </div>
-  <div class="elaborator-review-lobby-score-chart-container">
+  <div class="elaborator-review-score-chart-container">
     <canvas #scoreChart></canvas>
   </div>
-  <mat-accordion class="elaborator-review-lobby-accordion">
+  <mat-accordion class="elaborator-review-accordion">
     <mat-expansion-panel *ngFor="let question of questions; index as i">
       <mat-expansion-panel-header>
         <mat-panel-title> {{ i }}. {{ question.value }} </mat-panel-title>

@@ -2,7 +2,6 @@ import { createAction } from '@ngrx/store';
 import {
   Question,
   SelectedAnswer,
-  EvaluationResult,
   SelectedAndRightAnswer,
 } from '../../component/elaborator-question.model';
 
@@ -11,7 +10,10 @@ const ACTION_PREFIX = 'Elaborator';
 export namespace ElaboratorAction {
   export const getQuestion = createAction(
     `${ACTION_PREFIX} Get Question`,
-    (selectedAnswerIds: string[] = []) => ({ selectedAnswerIds })
+    (selectedAnswerIds: string[] = [], oneTimeCode?: string ) => ({
+      oneTimeCode,
+      selectedAnswerIds,
+    })
   );
 
   export const getQuestionSuccess = createAction(
@@ -35,7 +37,11 @@ export namespace ElaboratorAction {
 
   export const evaluateAnswersSuccess = createAction(
     `${ACTION_PREFIX} Evaluate Answers Success`,
-    (selectedAndRightAnswers: SelectedAndRightAnswer[], score: number, questions: Question[]) => ({
+    (
+      selectedAndRightAnswers: SelectedAndRightAnswer[],
+      score: number,
+      questions: Question[]
+    ) => ({
       selectedAndRightAnswers,
       score,
       questions,
@@ -44,9 +50,5 @@ export namespace ElaboratorAction {
 
   export const evaluateAnswersFail = createAction(
     `${ACTION_PREFIX} Evaluate Answers Fail`
-  );
-
-  export const reset = createAction(
-    `${ACTION_PREFIX} Reset`
   );
 }
