@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,11 +29,16 @@ import { LobbyComponent } from './component/lobby/lobby.component';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotificationComponent } from './component/notification/notification.component';
+import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
 
 export interface AppState {
   elaborator: ElaboratorState;
   review: ReviewState;
 }
+
+const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: OneTimeCodeInterceptor, multi: true },
+];
 
 @NgModule({
   declarations: [
@@ -66,6 +71,7 @@ export interface AppState {
     }),
     EffectsModule.forRoot([ElaboratorEffect]),
   ],
+  providers: [...httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

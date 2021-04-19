@@ -10,10 +10,14 @@ const ACTION_PREFIX = 'Elaborator';
 export namespace ElaboratorAction {
   export const getQuestion = createAction(
     `${ACTION_PREFIX} Get Question`,
-    (selectedAnswerIds: string[] = [], oneTimeCode?: string ) => ({
-      oneTimeCode,
+    (selectedAnswerIds: string[]) => ({
       selectedAnswerIds,
     })
+  );
+
+  export const getFirstQuestion = createAction(
+    `${ACTION_PREFIX} Get First Question`,
+    (oneTimeCode: string) => ({ oneTimeCode })
   );
 
   export const getQuestionSuccess = createAction(

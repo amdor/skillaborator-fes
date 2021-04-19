@@ -63,6 +63,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   startSkillaboration() {
     this.lastRequestedOneTimeCode = this.oneTimeCode.value;
-    this.store.dispatch(ElaboratorAction.getQuestion(this.oneTimeCode.value));
+    this.store.dispatch(
+      ElaboratorAction.getFirstQuestion(this.oneTimeCode.value)
+    );
   }
 }

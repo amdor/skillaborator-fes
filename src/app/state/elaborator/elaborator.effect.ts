@@ -10,7 +10,7 @@ import {
   SelectedAnswer,
   SelectedAndRightAnswer,
 } from '../../component/elaborator-question.model';
-import { of } from 'rxjs';
+import { of, pipe } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app';
 import { getSelectedAnswers, getQuestions } from './elaborator.selector';
@@ -20,25 +20,38 @@ import { NotificationType } from 'src/app/component/notification/notification.mo
 
 @Injectable()
 export class ElaboratorEffect {
-  getQuestion$ = createEffect(() =>
+  private getQuestionResult$ = pipe(
+    map((question: Question) => {
+      const randomizedQuestion = this.randomize(question);
+      return ElaboratorAction.getQuestionSuccess(randomizedQuestion);
+    }),
+    catchError((err: HttpErrorResponse) => {
+      if (err.status === 401) {
+        this.notificationService.showNotification(
+          NotificationType.FAILURE,
+          'Session code is wrong/already used'
+        );
+      }
+      return of(ElaboratorAction.getQuestionFail());
+    })
+  );
+
+  getNextQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ElaboratorAction.getQuestion),
-      mergeMap(({ selectedAnswerIds, oneTimeCode }) =>
-        this.service.getQuestion(selectedAnswerIds, oneTimeCode).pipe(
-          map((question: Question) => {
-            const randomizedQuestion = this.randomize(question);
-            return ElaboratorAction.getQuestionSuccess(randomizedQuestion);
-          }),
-          catchError((err: HttpErrorResponse) => {
-            if (err.status === 401) {
-              this.notificationService.showNotification(
-                NotificationType.FAILURE,
-                'Session code is wrong/already used'
-              );
-            }
-            return of(ElaboratorAction.getQuestionFail());
-          })
-        )
+      mergeMap(({ selectedAnswerIds }) =>
+        this.service
+          .getQuestion({ answerIds: selectedAnswerIds })
+          .pipe(this.getQuestionResult$)
+      )
+    )
+  );
+
+  getFirstQuestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ElaboratorAction.getFirstQuestion),
+      mergeMap(({ oneTimeCode }) =>
+        this.service.getQuestion({ oneTimeCode }).pipe(this.getQuestionResult$)
       )
     )
   );

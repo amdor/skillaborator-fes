@@ -73,7 +73,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     this.currentQuestionNumber++;
     this.saveAnswer(selectedAnswerIds);
 
-    // this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
+    this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
   }
 
   onElaborationFinished(selectedAnswerIds: string[]) {
