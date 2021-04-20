@@ -39,9 +39,17 @@ export class OneTimeCodeInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const oneTimeCode = this.collectRouteParams().oneTimeCode;
     const questionEndpoint = this.configService.getQuestionEndpoint();
+    const elaboratorEndpoint = this.configService.getSelectedAnswersEndpoint();
+    // TODO clean this up
     if (oneTimeCode && req.url === questionEndpoint) {
       const newReq = req.clone({
         url: questionEndpoint + `/${oneTimeCode}`,
+      });
+      return next.handle(newReq);
+    }
+    if (oneTimeCode && req.url === elaboratorEndpoint) {
+      const newReq = req.clone({
+        url: elaboratorEndpoint + `/${oneTimeCode}`,
       });
       return next.handle(newReq);
     }

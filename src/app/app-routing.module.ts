@@ -14,7 +14,7 @@ const routes: Routes = [
     component: ElaboratorLobbyComponent,
   },
   {
-    path: 'review',
+    path: 'review/:oneTimeCode',
     component: ElaboratorReviewLobbyComponent,
   },
   {
