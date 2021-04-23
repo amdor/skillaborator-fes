@@ -49,9 +49,11 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // TODO redirect if store's empty
     const getCurrentQuestion$ = this.store.select(getCurrentQuestion).pipe(
       tap((question: Question) => {
+        if (!question) {
+          this.router.navigate(['/']);
+        }
         this.question = question;
       })
     );

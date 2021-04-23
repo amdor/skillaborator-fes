@@ -5,15 +5,8 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ParamMap,
-  Params,
-  Router,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { ConfigService } from './config.service';
 
 @Injectable()
@@ -37,19 +30,21 @@ export class OneTimeCodeInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const oneTimeCode = this.collectRouteParams().oneTimeCode;
+    const { oneTimeCode } = this.collectRouteParams();
+    let matchedEndpoint: string;
     const questionEndpoint = this.configService.getQuestionEndpoint();
     const elaboratorEndpoint = this.configService.getSelectedAnswersEndpoint();
-    // TODO clean this up
-    if (oneTimeCode && req.url === questionEndpoint) {
+    switch (req.url) {
+      case `${questionEndpoint}`:
+        matchedEndpoint = questionEndpoint;
+        break;
+      case `${elaboratorEndpoint}`:
+        matchedEndpoint = elaboratorEndpoint;
+        break;
+    }
+    if (oneTimeCode && matchedEndpoint) {
       const newReq = req.clone({
         url: questionEndpoint + `/${oneTimeCode}`,
-      });
-      return next.handle(newReq);
-    }
-    if (oneTimeCode && req.url === elaboratorEndpoint) {
-      const newReq = req.clone({
-        url: elaboratorEndpoint + `/${oneTimeCode}`,
       });
       return next.handle(newReq);
     }
