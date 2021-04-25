@@ -31,7 +31,6 @@ export class ElaboratorService {
 
     return this.httpClient.get<Question>(questionEndpoint, {
       params: requestParams,
-      withCredentials: true,
     });
   }
 
@@ -45,7 +44,6 @@ export class ElaboratorService {
 
     return this.httpClient.get<EvaluationResult>(selectedAnswersEndpoint, {
       params: requestParams,
-      withCredentials: true,
     });
   }
 }

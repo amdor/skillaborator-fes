@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   HostBinding,
   OnDestroy,
@@ -17,27 +18,45 @@ import {
   getLoadingCurrentQuestion,
 } from '../../state';
 import { Question } from '../elaborator-question.model';
+import { TempService } from './temp.service';
 
 @Component({
   selector: 'sk-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: [],
+  styleUrls: ['./lobby.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  providers: [TempService],
 })
 export class LobbyComponent implements OnInit, OnDestroy {
   @HostBinding('class.sk-lobby') hostCss = true;
 
   oneTimeCode = new FormControl('', [Validators.required]);
-  loading$: Observable<boolean>;
+  loading = false;
+  codes: string[];
 
+  private loading$$: Subscription;
   private getCurrentQuestion$$: Subscription;
   private lastRequestedOneTimeCode: string;
+  private codes$$: Subscription;
 
-  constructor(private store: Store, private router: Router) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private tempService: TempService
+  ) {}
 
   ngOnInit() {
-    this.loading$ = this.store.select(getLoadingCurrentQuestion);
+    this.loading$$ = this.store
+      .select(getLoadingCurrentQuestion)
+      .pipe(
+        tap((loading) => {
+          this.loading = loading;
+          this.cdRef.markForCheck();
+        })
+      )
+      .subscribe();
     this.getCurrentQuestion$$ = this.store
       .select(getCurrentQuestion)
       .subscribe({
@@ -47,10 +66,18 @@ export class LobbyComponent implements OnInit, OnDestroy {
           }
         },
       });
+
+    // TODO remove
+    this.codes$$ = this.tempService.getAvailableCodes().subscribe((codes) => {
+      this.codes = codes;
+      this.cdRef.markForCheck();
+    });
   }
 
   ngOnDestroy() {
     this.getCurrentQuestion$$?.unsubscribe();
+    this.loading$$?.unsubscribe();
+    this.codes$$?.unsubscribe();
   }
 
   getErrorMessage() {
@@ -63,6 +90,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   startSkillaboration() {
     this.lastRequestedOneTimeCode = this.oneTimeCode.value;
+    this.loading = true;
     this.store.dispatch(
       ElaboratorAction.getFirstQuestion(this.oneTimeCode.value)
     );

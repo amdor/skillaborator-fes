@@ -11,9 +11,17 @@
   mat-stroked-button
   color="primary"
   (click)="startSkillaboration()"
-  [disabled]="(loading$ | async) || !oneTimeCode.value || oneTimeCode.invalid"
+  [disabled]="loading || !oneTimeCode.value || oneTimeCode.invalid"
 >
   Start skillaboration
 </button>
-<mat-spinner *ngIf="loading$ | async"></mat-spinner>
-<sk-notification></sk-notification>
+<div class="sk-lobby-footer">
+  <mat-spinner [diameter]="50" *ngIf="loading"></mat-spinner>
+  <sk-notification></sk-notification>
+</div>
+<div>
+  <p>Available codes:</p>
+  <p *ngFor="let code of codes">
+    {{ code }}
+  </p>
+</div>

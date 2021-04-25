@@ -1,10 +1,33 @@
 .sk-notification {
+  @keyframes appear {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
   .alert {
-    position: relative;
+    position: absolute;
     padding: 1rem 1rem;
-    margin-bottom: 1rem;
     border: 1px solid transparent;
     border-radius: 0.25rem;
+    width: fit-content;
+    margin: auto;
+    left: 0;
+    right: 0;
+
+    animation-name: appear;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-direction: alternate;
   }
 
   .alert-danger {
@@ -18,5 +41,4 @@
     background-color: #d4edda;
     border-color: #c3e6cb;
   }
-  background-color: yellow;
 }

@@ -31,6 +31,11 @@ export class ElaboratorEffect {
           NotificationType.FAILURE,
           'Session code is wrong/already used'
         );
+      } else if (err.status >= 400 || err.status === 0) {
+        this.notificationService.showNotification(
+          NotificationType.FAILURE,
+          err.error ?? err.message
+        );
       }
       return of(ElaboratorAction.getQuestionFail());
     })

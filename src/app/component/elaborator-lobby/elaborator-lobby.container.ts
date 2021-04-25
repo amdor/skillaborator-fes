@@ -32,7 +32,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 
   question: Question | undefined;
   isLoadingQuestion = true;
-  currentQuestionNumber = 1;
+  currentQuestionNumber = 0;
   readOnlyMode = false;
   readonly maxQuestionCount: number;
 
@@ -55,6 +55,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         }
         this.question = question;
+        this.currentQuestionNumber++;
       })
     );
 
@@ -74,7 +75,6 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   getNextQuestion(selectedAnswerIds: string[]) {
-    this.currentQuestionNumber++;
     this.saveAnswer(selectedAnswerIds);
 
     this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
