@@ -1,0 +1,27 @@
+<mat-form-field appearance="fill" hideRequiredMarker>
+  <mat-label>Enter one time code</mat-label>
+  <input matInput placeholder="Code" [formControl]="oneTimeCode" required />
+  <!-- TODO hint -->
+  <mat-hint *ngIf="!oneTimeCode.invalid && !oneTimeCode.value"
+    >Enter one time code to start</mat-hint
+  >
+  <mat-error *ngIf="oneTimeCode.invalid">{{ getErrorMessage() }}</mat-error>
+</mat-form-field>
+<button
+  mat-stroked-button
+  color="primary"
+  (click)="startSkillaboration()"
+  [disabled]="loading || !oneTimeCode.value || oneTimeCode.invalid"
+>
+  Start skillaboration
+</button>
+<div class="sk-lobby-footer">
+  <mat-spinner [diameter]="50" *ngIf="loading"></mat-spinner>
+  <sk-notification></sk-notification>
+</div>
+<div>
+  <p>Available codes:</p>
+  <p *ngFor="let code of codes">
+    {{ code }}
+  </p>
+</div>

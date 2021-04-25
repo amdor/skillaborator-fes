@@ -1,14 +1,14 @@
 @import "~@angular/material/theming";
 @import "../elaborator-question/elaborator-question.theme";
 
-@mixin elaborator-review-lobby-theme($theme) {
+@mixin elaborator-review-theme($theme) {
   $color-config: mat-get-color-config($theme);
   $typography-config: mat-typography-config();
 
   // Extract the palettes you need from the theme definition.
   $primary: map-get($color-config, primary);
 
-  .elaborator-review-lobby {
+  .elaborator-review {
     &-score-container {
       &.beginner {
         color: mat-color($mat-light-blue, 400);

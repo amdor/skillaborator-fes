@@ -12,18 +12,25 @@ import { Observable } from 'rxjs';
 export class ElaboratorService {
   constructor(private httpClient: HttpClient, private config: ConfigService) {}
 
-  getQuestion(answerIds: string[]): Observable<Question> {
-    const questionEndpoint = this.config.getQuestionEndpoint();
+  getQuestion({
+    answerIds,
+    oneTimeCode,
+  }: {
+    answerIds?: string[];
+    oneTimeCode?: string;
+  }): Observable<Question> {
+    const questionEndpoint = oneTimeCode
+      ? this.config.getQuestionEndpoint() + `/${oneTimeCode}`
+      : this.config.getQuestionEndpoint();
 
     let requestParams = new HttpParams();
 
-    answerIds.forEach(
+    answerIds?.forEach(
       (answerId) => (requestParams = requestParams.append('answerId', answerId))
     );
 
     return this.httpClient.get<Question>(questionEndpoint, {
       params: requestParams,
-      withCredentials: true,
     });
   }
 
@@ -37,7 +44,6 @@ export class ElaboratorService {
 
     return this.httpClient.get<EvaluationResult>(selectedAnswersEndpoint, {
       params: requestParams,
-      withCredentials: true,
     });
   }
 }

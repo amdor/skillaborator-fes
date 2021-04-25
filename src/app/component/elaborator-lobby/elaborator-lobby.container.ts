@@ -18,7 +18,7 @@ import { Question } from '../elaborator-question.model';
 import { AppState } from './../../app.module';
 import { ConfigService } from './../../service';
 import { tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'sk-elaborator-lobby',
@@ -32,7 +32,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 
   question: Question | undefined;
   isLoadingQuestion = true;
-  currentQuestionNumber = 1;
+  currentQuestionNumber = 0;
   readOnlyMode = false;
   readonly maxQuestionCount: number;
 
@@ -42,18 +42,20 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private cdRef: ChangeDetectorRef,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     configService: ConfigService
   ) {
     this.maxQuestionCount = configService.getMaxQuestionsCount();
   }
 
   ngOnInit() {
-    this.store.dispatch(ElaboratorAction.reset())
-    this.store.dispatch(ElaboratorAction.getQuestion());
-
     const getCurrentQuestion$ = this.store.select(getCurrentQuestion).pipe(
       tap((question: Question) => {
+        if (!question) {
+          this.router.navigate(['/']);
+        }
         this.question = question;
+        this.currentQuestionNumber++;
       })
     );
 
@@ -73,7 +75,6 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   }
 
   getNextQuestion(selectedAnswerIds: string[]) {
-    this.currentQuestionNumber++;
     this.saveAnswer(selectedAnswerIds);
 
     this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
@@ -82,7 +83,10 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   onElaborationFinished(selectedAnswerIds: string[]) {
     this.saveAnswer(selectedAnswerIds);
     this.store.dispatch(ElaboratorAction.evaluateAnswers(selectedAnswerIds));
-    this.router.navigate(['/review']);
+    this.router.navigate([
+      '/review',
+      this.activatedRoute.snapshot.paramMap.get('oneTimeCode'),
+    ]);
   }
 
   private saveAnswer(selectedAnswerIds: string[]) {

@@ -15,15 +15,19 @@ export interface ElaboratorState {
 const initialState = {
   currentQuestion: undefined,
   questions: [],
-  busy: true,
+  busy: false,
 };
 
 export const elaboratorReducer = createReducer(
   initialState,
-  on(ElaboratorAction.getQuestion, (state) => ({
-    ...state,
-    busy: true,
-  })),
+  on(
+    ElaboratorAction.getQuestion,
+    ElaboratorAction.getFirstQuestion,
+    (state) => ({
+      ...state,
+      busy: true,
+    })
+  ),
   on(ElaboratorAction.getQuestionSuccess, (state, { question }) => ({
     ...state,
     currentQuestion: question,
@@ -43,6 +47,5 @@ export const elaboratorReducer = createReducer(
         selectedAnswers: [...oldAnswers, selectedAnswer],
       };
     }
-  ),
-  on(ElaboratorAction.reset, () => initialState),
+  )
 );

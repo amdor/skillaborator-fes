@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ElaboratorLobbyComponent } from './component/elaborator-lobby/elaborator-lobby.container';
-import { ElaboratorReviewLobbyComponent } from './component/elaborator-review-lobby/elaborator-review-lobby.container';
+import { ElaboratorReviewLobbyComponent } from './component/elaborator-review/elaborator-review.container';
 import { ElaboratorQuestionComponent } from './component/elaborator-question/elaborator-question.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -24,11 +24,21 @@ import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { LobbyComponent } from './component/lobby/lobby.component';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NotificationComponent } from './component/notification/notification.component';
+import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
 
 export interface AppState {
   elaborator: ElaboratorState;
   review: ReviewState;
 }
+
+const httpInterceptorProviders = [
+  { provide: HTTP_INTERCEPTORS, useClass: OneTimeCodeInterceptor, multi: true },
+];
 
 @NgModule({
   declarations: [
@@ -36,9 +46,12 @@ export interface AppState {
     ElaboratorLobbyComponent,
     ElaboratorQuestionComponent,
     ElaboratorReviewLobbyComponent,
+    LobbyComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -50,12 +63,15 @@ export interface AppState {
     MatExpansionModule,
     MatIconModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
     StoreModule.forRoot({
       elaborator: elaboratorReducer,
       review: reviewReducer,
     }),
     EffectsModule.forRoot([ElaboratorEffect]),
   ],
+  providers: [...httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
