@@ -64,8 +64,8 @@ export class ElaboratorEffect {
   evaluateAnswers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ElaboratorAction.evaluateAnswers),
-      mergeMap(({ selectedAnswerIds }) =>
-        this.service.getSelectedAnswers(selectedAnswerIds).pipe(
+      mergeMap(({ selectedAnswerIds, oneTimeCode }) =>
+        this.service.putSelectedAnswers(selectedAnswerIds).pipe(
           withLatestFrom(
             this.store.select(getQuestions),
             this.store.select(getSelectedAnswers)
@@ -85,11 +85,12 @@ export class ElaboratorEffect {
                     ],
                 })
               );
-              return ElaboratorAction.evaluateAnswersSuccess(
+              return ElaboratorAction.evaluateAnswersSuccess({
                 selectedAndRightAnswers,
-                evaluationResult.score,
-                questions
-              );
+                score: evaluationResult.score,
+                questions,
+                oneTimeCode,
+              });
             }
           ),
           catchError((err) => {

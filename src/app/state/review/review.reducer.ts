@@ -1,22 +1,26 @@
 import {
   SelectedAndRightAnswer,
   Question,
+  GetSelectedAnswersResponse,
 } from '../../component/elaborator-question.model';
 import { ElaboratorAction } from '../elaborator/elaborator.action';
 import { on } from '@ngrx/store';
-import { createRehydrateReducer } from 'src/app/service';
+import { createRehydrateReducer } from '../../service';
 import { SELECTED_ANSWERS_STORAGE_KEY } from '../../service/utils/storage.service';
+import { ReviewAction } from './review.action';
 
 export interface ReviewState {
   selectedAndRightAnswers: SelectedAndRightAnswer[];
   score: number;
   questions: Question[];
+  oneTimeCode: string;
 }
 
 const initialState = {
   selectedAndRightAnswers: [],
   score: 0,
   questions: [],
+  oneTimeCode: '',
 };
 
 export const reviewReducer = createRehydrateReducer(
@@ -24,17 +28,34 @@ export const reviewReducer = createRehydrateReducer(
   initialState,
   on(
     ElaboratorAction.evaluateAnswersSuccess,
-    (state: ReviewState, { selectedAndRightAnswers, score, questions }) => {
+    (
+      state: ReviewState,
+      { selectedAndRightAnswers, score, questions, oneTimeCode }
+    ) => {
       return {
         ...state,
         selectedAndRightAnswers,
         score,
         questions,
+        oneTimeCode,
+      };
+    }
+  ),
+  on(
+    ReviewAction.getEvaluationResultsSuccess,
+    (state: ReviewState, newState: ReviewState) => {
+      return {
+        ...state,
+        ...newState,
       };
     }
   ),
   // TODO: show some message, stop spinner
-  on(ElaboratorAction.evaluateAnswersFail, (state: ReviewState) => ({
-    ...state,
-  }))
+  on(
+    ElaboratorAction.evaluateAnswersFail,
+    ReviewAction.getEvaluationResultsFail,
+    (state: ReviewState) => ({
+      ...state,
+    })
+  )
 );

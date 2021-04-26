@@ -44,7 +44,7 @@ export class OneTimeCodeInterceptor implements HttpInterceptor {
     }
     if (oneTimeCode && matchedEndpoint) {
       const newReq = req.clone({
-        url: questionEndpoint + `/${oneTimeCode}`,
+        url: matchedEndpoint + `/${oneTimeCode}`,
       });
       return next.handle(newReq);
     }

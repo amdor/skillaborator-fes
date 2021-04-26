@@ -13,13 +13,16 @@ import { Store } from '@ngrx/store';
 import { combineLatest, Subscription } from 'rxjs';
 import { Question, SelectedAndRightAnswer } from '../elaborator-question.model';
 import { AppState } from '../../app.module';
-import { tap, filter } from 'rxjs/operators';
+import { tap, filter, map } from 'rxjs/operators';
 import {
   getQuestions,
   getSelectedAndRightAnswers,
   getScore,
+  getOneTimeCode,
+  ElaboratorAction,
+  ReviewAction,
 } from '../../state';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Chart } from 'chart.js';
 import { ProfessionalLevel } from './elaborator-review.model';
 
@@ -70,7 +73,8 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private cdRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -78,8 +82,14 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
       this.store.select(getSelectedAndRightAnswers),
       this.store.select(getScore),
       this.store.select(getQuestions),
+      this.store.select(getOneTimeCode),
     ])
       .pipe(
+        filter(
+          ([, , , oneTimeCode]) =>
+            oneTimeCode ===
+            this.activatedRoute.snapshot.paramMap.get('oneTimeCode')
+        ),
         tap(([, , questions]) => {
           if (!questions?.length) {
             this.router.navigate(['']);
@@ -88,6 +98,14 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
         filter(
           ([selectedAndRightAnswers, , questions]) =>
             !!selectedAndRightAnswers?.length && !!questions?.length
+        ),
+        map(
+          ([selectedAndRightAnswers, score, questions]: [
+            SelectedAndRightAnswer[],
+            number,
+            Question[],
+            string
+          ]) => [selectedAndRightAnswers, score, questions]
         )
       )
       .subscribe(
@@ -120,6 +138,22 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
           this.cdRef.markForCheck();
         }
       );
+
+    const oneTimeCode$$ = combineLatest([
+      this.store.select(getOneTimeCode),
+      this.activatedRoute.paramMap,
+    ]).subscribe({
+      next: ([persistedOneTimeCode, activatedRouteParams]) => {
+        const currentOneTimeCode = activatedRouteParams.get('oneTimeCode');
+        if (persistedOneTimeCode !== currentOneTimeCode) {
+          this.store.dispatch(
+            ReviewAction.getEvaluationResults(currentOneTimeCode)
+          );
+        }
+      },
+    });
+
+    this.data$$.add(oneTimeCode$$);
   }
 
   ngOnDestroy() {
