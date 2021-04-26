@@ -10,9 +10,12 @@ export {
   getSelectedAnswers,
 } from './elaborator/elaborator.selector';
 
+export { ReviewAction } from './review/review.action';
+export { ReviewEffect } from './review/review.effect';
 export { ReviewState, reviewReducer } from './review/review.reducer';
 export {
   getScore,
   getSelectedAndRightAnswers,
   getQuestions,
+  getOneTimeCode,
 } from './review/review.selector';

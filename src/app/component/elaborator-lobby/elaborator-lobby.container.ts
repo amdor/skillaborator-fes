@@ -82,10 +82,12 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 
   onElaborationFinished(selectedAnswerIds: string[]) {
     this.saveAnswer(selectedAnswerIds);
-    this.store.dispatch(ElaboratorAction.evaluateAnswers(selectedAnswerIds));
+
+    const oneTimeCode = this.activatedRoute.snapshot.paramMap.get('oneTimeCode');
+    this.store.dispatch(ElaboratorAction.evaluateAnswers(oneTimeCode, selectedAnswerIds));
     this.router.navigate([
       '/review',
-      this.activatedRoute.snapshot.paramMap.get('oneTimeCode'),
+      oneTimeCode,
     ]);
   }
 

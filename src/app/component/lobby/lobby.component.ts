@@ -48,6 +48,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(ElaboratorAction.reset());
     this.loading$$ = this.store
       .select(getLoadingCurrentQuestion)
       .pipe(

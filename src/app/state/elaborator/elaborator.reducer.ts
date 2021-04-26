@@ -30,7 +30,7 @@ export const elaboratorReducer = createReducer(
   ),
   on(ElaboratorAction.getQuestionSuccess, (state, { question }) => ({
     ...state,
-    currentQuestion: question,
+    currentQuestion: { ...question },
     questions: [...state.questions, question],
     busy: false,
   })),
@@ -47,5 +47,6 @@ export const elaboratorReducer = createReducer(
         selectedAnswers: [...oldAnswers, selectedAnswer],
       };
     }
-  )
+  ),
+  on(ElaboratorAction.reset, () => initialState),
 );

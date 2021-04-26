@@ -18,6 +18,7 @@ import {
   elaboratorReducer,
   ReviewState,
   reviewReducer,
+  ReviewEffect,
 } from './state';
 import { EffectsModule } from '@ngrx/effects';
 import { MatListModule } from '@angular/material/list';
@@ -69,7 +70,7 @@ const httpInterceptorProviders = [
       elaborator: elaboratorReducer,
       review: reviewReducer,
     }),
-    EffectsModule.forRoot([ElaboratorEffect]),
+    EffectsModule.forRoot([ElaboratorEffect, ReviewEffect]),
   ],
   providers: [...httpInterceptorProviders],
   bootstrap: [AppComponent],

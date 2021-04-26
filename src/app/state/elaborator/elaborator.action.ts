@@ -36,23 +36,27 @@ export namespace ElaboratorAction {
 
   export const evaluateAnswers = createAction(
     `${ACTION_PREFIX} Evaluate Answers`,
-    (selectedAnswerIds: string[] = []) => ({ selectedAnswerIds })
+    (oneTimeCode: string, selectedAnswerIds: string[]) => ({
+      oneTimeCode,
+      selectedAnswerIds,
+    })
   );
 
   export const evaluateAnswersSuccess = createAction(
     `${ACTION_PREFIX} Evaluate Answers Success`,
-    (
-      selectedAndRightAnswers: SelectedAndRightAnswer[],
-      score: number,
-      questions: Question[]
-    ) => ({
-      selectedAndRightAnswers,
-      score,
-      questions,
-    })
+    (evalutationResults: {
+      selectedAndRightAnswers: SelectedAndRightAnswer[];
+      score: number;
+      questions: Question[];
+      oneTimeCode: string;
+    }) => evalutationResults
   );
 
   export const evaluateAnswersFail = createAction(
     `${ACTION_PREFIX} Evaluate Answers Fail`
+  );
+
+  export const reset = createAction(
+    `${ACTION_PREFIX} Reset`
   );
 }
