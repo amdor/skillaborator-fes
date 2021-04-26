@@ -5,6 +5,7 @@ import {
   Question,
   SelectedAnswer,
   EvaluationResult,
+  GetSelectedAnswersResponse,
 } from '../component/elaborator-question.model';
 import { Observable } from 'rxjs';
 
@@ -34,7 +35,7 @@ export class ElaboratorService {
     });
   }
 
-  getSelectedAnswers(answerIds: string[]): Observable<EvaluationResult> {
+  putSelectedAnswers(answerIds: string[]): Observable<EvaluationResult> {
     const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
     let requestParams = new HttpParams();
 
@@ -42,8 +43,19 @@ export class ElaboratorService {
       (answerId) => (requestParams = requestParams.append('answerId', answerId))
     );
 
-    return this.httpClient.get<EvaluationResult>(selectedAnswersEndpoint, {
-      params: requestParams,
-    });
+    return this.httpClient.put<EvaluationResult>(
+      selectedAnswersEndpoint,
+      null,
+      {
+        params: requestParams,
+      }
+    );
+  }
+
+  getSelectedAnswers(): Observable<GetSelectedAnswersResponse> {
+    const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
+    return this.httpClient.get<GetSelectedAnswersResponse>(
+      selectedAnswersEndpoint
+    );
   }
 }

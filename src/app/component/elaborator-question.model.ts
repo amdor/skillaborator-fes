@@ -2,7 +2,6 @@ export interface Question {
   id: string;
   value: string;
   answers: Answer[];
-  level: number;
   multi: boolean;
   code?: Code;
 }
@@ -29,4 +28,14 @@ export interface Code {
 export interface EvaluationResult {
   rightAnswersByQuestions: Record<string, string[]>;
   score: number;
+}
+
+export interface QuestionWithRightAnswer extends Question {
+  rightAnswers: string[];
+}
+
+export interface GetSelectedAnswersResponse {
+  questionsWithRightAnswers: QuestionWithRightAnswer[];
+  score: number;
+  selectedAnswers: SelectedAnswer[];
 }
