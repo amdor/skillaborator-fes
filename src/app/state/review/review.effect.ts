@@ -26,9 +26,11 @@ export class ReviewEffect {
             }: GetSelectedAnswersResponse) => {
               // TODO question model should contain right answers, simplification needed everywhere, less mapping etc.
               const rightAnswersByQuestions = questionsWithRightAnswers.reduce(
-                (acc, questionWithRightAnswers) =>
-                  (acc[questionWithRightAnswers.id] =
-                    questionWithRightAnswers.rightAnswers),
+                (acc, questionWithRightAnswers) => {
+                  acc[questionWithRightAnswers.id] =
+                    questionWithRightAnswers.rightAnswers;
+                  return acc;
+                },
                 {}
               );
               const selectedAndRightAnswers = selectedAnswers.map(
