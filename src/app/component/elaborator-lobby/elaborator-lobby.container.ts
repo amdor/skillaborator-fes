@@ -74,21 +74,39 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     this.data$$?.unsubscribe();
   }
 
+  onQuestionTimeout() {
+    if (this.currentQuestionNumber === this.maxQuestionCount) {
+      this.onElaborationFinished([]);
+      return;
+    }
+    this.getNextQuestion([]);
+  }
+
   getNextQuestion(selectedAnswerIds: string[]) {
     this.saveAnswer(selectedAnswerIds);
 
-    this.store.dispatch(ElaboratorAction.getQuestion(selectedAnswerIds));
+    this.store.dispatch(
+      ElaboratorAction.getQuestion(
+        selectedAnswerIds,
+        selectedAnswerIds.length === 0
+      )
+    );
   }
 
   onElaborationFinished(selectedAnswerIds: string[]) {
     this.saveAnswer(selectedAnswerIds);
 
-    const oneTimeCode = this.activatedRoute.snapshot.paramMap.get('oneTimeCode');
-    this.store.dispatch(ElaboratorAction.evaluateAnswers(oneTimeCode, selectedAnswerIds));
-    this.router.navigate([
-      '/review',
-      oneTimeCode,
-    ]);
+    const oneTimeCode = this.activatedRoute.snapshot.paramMap.get(
+      'oneTimeCode'
+    );
+    this.store.dispatch(
+      ElaboratorAction.evaluateAnswers(
+        oneTimeCode,
+        selectedAnswerIds,
+        selectedAnswerIds.length === 0
+      )
+    );
+    this.router.navigate(['/review', oneTimeCode]);
   }
 
   private saveAnswer(selectedAnswerIds: string[]) {

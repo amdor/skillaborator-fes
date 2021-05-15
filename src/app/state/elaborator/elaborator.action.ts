@@ -10,8 +10,9 @@ const ACTION_PREFIX = 'Elaborator';
 export namespace ElaboratorAction {
   export const getQuestion = createAction(
     `${ACTION_PREFIX} Get Question`,
-    (selectedAnswerIds: string[]) => ({
+    (selectedAnswerIds: string[], timedOut: boolean = false) => ({
       selectedAnswerIds,
+      timedOut
     })
   );
 
@@ -36,9 +37,10 @@ export namespace ElaboratorAction {
 
   export const evaluateAnswers = createAction(
     `${ACTION_PREFIX} Evaluate Answers`,
-    (oneTimeCode: string, selectedAnswerIds: string[]) => ({
+    (oneTimeCode: string, selectedAnswerIds: string[], timedOut: boolean = false) => ({
       oneTimeCode,
       selectedAnswerIds,
+      timedOut
     })
   );
 

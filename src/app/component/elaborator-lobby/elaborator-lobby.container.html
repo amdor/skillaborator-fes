@@ -5,6 +5,7 @@
   [maxQuestionCount]="maxQuestionCount"
   (nextQuestionClick)="getNextQuestion($event)"
   (elaborationFinished)="onElaborationFinished($event)"
+  (questionTimeout)="onQuestionTimeout()"
 ></sk-elaborator-question>
 
 <mat-spinner *ngIf="isLoadingQuestion"></mat-spinner>

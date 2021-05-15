@@ -31,7 +31,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotificationComponent } from './component/notification/notification.component';
 import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
-import { CountdownClockComponent } from './component/elaborator-question/countdown-clock/countdown-clock/countdown-clock.component';
+import { CountdownClockComponent } from './component/elaborator-question/countdown-clock/countdown-clock.component';
 
 export interface AppState {
   elaborator: ElaboratorState;

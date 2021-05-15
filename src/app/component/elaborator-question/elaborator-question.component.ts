@@ -11,14 +11,10 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { MatRadioChange } from '@angular/material/radio';
-import {
-  Question,
-  SelectedAndRightAnswer,
-} from '../elaborator-question.model';
+import { Question, SelectedAndRightAnswer } from '../elaborator-question.model';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as hljs from 'highlight.js';
-
 
 @Component({
   selector: 'sk-elaborator-question',
@@ -47,6 +43,7 @@ export class ElaboratorQuestionComponent implements OnChanges, AfterViewInit {
     this._readOnly = coerceBooleanProperty(newVal);
   }
 
+  /** Used in pair with readOnly = true */
   @Input() selectedAndRightAnswer: SelectedAndRightAnswer;
 
   @Output()
@@ -55,16 +52,19 @@ export class ElaboratorQuestionComponent implements OnChanges, AfterViewInit {
   @Output()
   elaborationFinished = new EventEmitter<string[]>();
 
-  codeLanguage = "";
+  @Output()
+  questionTimeout = new EventEmitter<void>();
+
+  codeLanguage = '';
 
   private selectedAnswerIds: string[] = [];
   private _readOnly: boolean;
 
-  constructor() { }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.question && this.question.code) {
-      this.codeLanguage = "language-" + this.question.code.language;
+      this.codeLanguage = 'language-' + this.question.code.language;
     }
   }
 
@@ -95,6 +95,10 @@ export class ElaboratorQuestionComponent implements OnChanges, AfterViewInit {
       this.selectedAnswerIds.indexOf(selectedAnswerId),
       1
     );
+  }
+
+  onTimeout() {
+    this.questionTimeout.emit();
   }
 
   onNextClick() {

@@ -5,7 +5,6 @@
   <span *ngIf="question.code" class="elaborator-question-code-language">
     {{ question.code.language }}
   </span>
-  <sk-countdown-clock></sk-countdown-clock>
 </div>
 <pre *ngIf="question.code">
   <code [ngClass]="codeLanguage" class="elaborator-question-code-value unselectable">{{question?.code.value}}</code>
@@ -25,7 +24,12 @@
       [value]="answer.id"
       [checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
       [ngClass]="{
-        'right-answer': isRight(answer.id),
+        'right-answer':
+          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+          isRight(answer.id),
+        'missed-answer':
+          !selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+          isRight(answer.id),
         'wrong-answer':
           selectedAndRightAnswer?.answerIds.includes(answer.id) &&
           !isRight(answer.id),
@@ -64,26 +68,31 @@
     </li>
   </ul>
 </div>
-<div class="elaborator-question-footer" *ngIf="!readOnly">
-  <button
-    *ngIf="currentQuestionNumber !== maxQuestionCount"
-    mat-raised-button
-    color="primary"
-    [disabled]="!selectedAnswerIds.length"
-    (click)="onNextClick()"
-  >
-    Next question
-  </button>
-  <button
-    *ngIf="currentQuestionNumber === maxQuestionCount"
-    mat-raised-button
-    color="primary"
-    [disabled]="!selectedAnswerIds.length"
-    (click)="onEvaluate()"
-  >
-    Evaluate
-  </button>
-  <span class="elaborator-question-counter"
-    >{{ currentQuestionNumber }}/{{ maxQuestionCount }}</span
-  >
-</div>
+
+<ng-container *ngIf="!readOnly">
+  <sk-countdown-clock (clockTimeout)="onTimeout()"></sk-countdown-clock>
+
+  <div class="elaborator-question-footer">
+    <button
+      *ngIf="currentQuestionNumber !== maxQuestionCount"
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedAnswerIds.length"
+      (click)="onNextClick()"
+    >
+      Next question
+    </button>
+    <button
+      *ngIf="currentQuestionNumber === maxQuestionCount"
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedAnswerIds.length"
+      (click)="onEvaluate()"
+    >
+      Evaluate
+    </button>
+    <span class="elaborator-question-counter"
+      >{{ currentQuestionNumber }}/{{ maxQuestionCount }}</span
+    >
+  </div>
+</ng-container>

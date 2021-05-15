@@ -9,46 +9,50 @@ import {
 } from '../component/elaborator-question.model';
 import { Observable } from 'rxjs';
 
+export interface RequestProps {
+  answerIds: string[];
+  timedOut: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ElaboratorService {
   constructor(private httpClient: HttpClient, private config: ConfigService) {}
 
-  getQuestion({
-    answerIds,
-    oneTimeCode,
-  }: {
-    answerIds?: string[];
-    oneTimeCode?: string;
-  }): Observable<Question> {
-    const questionEndpoint = oneTimeCode
-      ? this.config.getQuestionEndpoint() + `/${oneTimeCode}`
-      : this.config.getQuestionEndpoint();
+  private getQuestionWithEndpoint(
+    questionEndpoint: string,
+    requestProps?: RequestProps
+  ): Observable<Question> {
+    if (!requestProps) {
+      return this.httpClient.get<Question>(questionEndpoint);
+    }
 
-    let requestParams = new HttpParams();
-
-    answerIds?.forEach(
-      (answerId) => (requestParams = requestParams.append('answerId', answerId))
-    );
+    const requestParams = this.getRequestParams(requestProps);
 
     return this.httpClient.get<Question>(questionEndpoint, {
       params: requestParams,
     });
   }
 
-  putSelectedAnswers(answerIds: string[]): Observable<EvaluationResult> {
-    const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
-    let requestParams = new HttpParams();
+  getFirstQuestion(oneTimeCode: string): Observable<Question> {
+    const questionEndpoint =
+      this.config.getQuestionEndpoint() + `/${oneTimeCode}`;
+    return this.getQuestionWithEndpoint(questionEndpoint);
+  }
 
-    answerIds.forEach(
-      (answerId) => (requestParams = requestParams.append('answerId', answerId))
-    );
+  getNextQuestion(props: { answerIds: string[]; timedOut: boolean }) {
+    const questionEndpoint = this.config.getQuestionEndpoint();
+    return this.getQuestionWithEndpoint(questionEndpoint, props);
+  }
+
+  putSelectedAnswers(requestProps: RequestProps): Observable<EvaluationResult> {
+    const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
+
+    const requestParams = this.getRequestParams(requestProps);
 
     return this.httpClient.put<EvaluationResult>(
       selectedAnswersEndpoint,
       null,
-      {
-        params: requestParams,
-      }
+      { params: requestParams }
     );
   }
 
@@ -57,5 +61,14 @@ export class ElaboratorService {
     return this.httpClient.get<GetSelectedAnswersResponse>(
       selectedAnswersEndpoint
     );
+  }
+
+  private getRequestParams({ answerIds, timedOut }: RequestProps) {
+    let requestParams = new HttpParams();
+    answerIds.forEach(
+      (answerId) => (requestParams = requestParams.append('answerId', answerId))
+    );
+    requestParams = requestParams.append('timedOut', timedOut.toString());
+    return requestParams;
   }
 }

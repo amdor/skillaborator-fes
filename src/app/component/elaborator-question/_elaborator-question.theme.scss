@@ -5,7 +5,7 @@
     (
       "headline-font-size": 1.7rem,
       "headline-line-height": 2rem,
-      "code-font-size": .8rem,
+      "code-font-size": 0.8rem,
       "code-line-height": 1rem,
       "content-font-size": 1.2rem,
       "content-line-height": 1.4rem,
@@ -34,6 +34,11 @@
     &-content {
       font-size: map-get($elaborator-question-theme, content-font-size);
       line-height: map-get($elaborator-question-theme, content-line-height);
+    }
+
+    .sk-countdown-clock {
+      font-size: 2rem;
+      line-height: 2.2rem;
     }
   }
 }

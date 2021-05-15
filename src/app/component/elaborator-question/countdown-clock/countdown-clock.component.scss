@@ -1,0 +1,19 @@
+@keyframes pulse {
+  from {
+    transform: scale(1, 1);
+    color: inherit;
+  }
+  to {
+    transform: scale(1.5, 1.5);
+    color: #f15e5e;
+  }
+}
+
+.sk-countdown-clock {
+  &-timeout-soon {
+    animation-name: pulse;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+}

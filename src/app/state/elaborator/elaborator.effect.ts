@@ -44,9 +44,9 @@ export class ElaboratorEffect {
   getNextQuestion$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ElaboratorAction.getQuestion),
-      mergeMap(({ selectedAnswerIds }) =>
+      mergeMap(({ selectedAnswerIds, timedOut }) =>
         this.service
-          .getQuestion({ answerIds: selectedAnswerIds })
+          .getNextQuestion({ answerIds: selectedAnswerIds, timedOut })
           .pipe(this.getQuestionResult$)
       )
     )
@@ -56,7 +56,7 @@ export class ElaboratorEffect {
     this.actions$.pipe(
       ofType(ElaboratorAction.getFirstQuestion),
       mergeMap(({ oneTimeCode }) =>
-        this.service.getQuestion({ oneTimeCode }).pipe(this.getQuestionResult$)
+        this.service.getFirstQuestion(oneTimeCode).pipe(this.getQuestionResult$)
       )
     )
   );
@@ -64,8 +64,8 @@ export class ElaboratorEffect {
   evaluateAnswers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ElaboratorAction.evaluateAnswers),
-      mergeMap(({ selectedAnswerIds, oneTimeCode }) =>
-        this.service.putSelectedAnswers(selectedAnswerIds).pipe(
+      mergeMap(({ selectedAnswerIds, oneTimeCode, timedOut}) =>
+        this.service.putSelectedAnswers({answerIds: selectedAnswerIds, timedOut}).pipe(
           withLatestFrom(
             this.store.select(getQuestions),
             this.store.select(getSelectedAnswers)
