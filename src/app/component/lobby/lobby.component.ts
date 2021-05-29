@@ -33,12 +33,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   oneTimeCode = new FormControl('', [Validators.required]);
   loading = false;
-  codes: string[];
 
   private loading$$: Subscription;
   private getCurrentQuestion$$: Subscription;
   private lastRequestedOneTimeCode: string;
-  private codes$$: Subscription;
+  private defaultOneTimeCode$$: Subscription;
 
   constructor(
     private store: Store,
@@ -69,8 +68,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
       });
 
     // TODO remove
-    this.codes$$ = this.tempService.getAvailableCodes().subscribe((codes) => {
-      this.codes = codes;
+    this.defaultOneTimeCode$$ = this.tempService.getAvailableCode().subscribe((code) => {
+      this.oneTimeCode.setValue(code);
       this.cdRef.markForCheck();
     });
   }
@@ -78,7 +77,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.getCurrentQuestion$$?.unsubscribe();
     this.loading$$?.unsubscribe();
-    this.codes$$?.unsubscribe();
+    this.defaultOneTimeCode$$?.unsubscribe();
   }
 
   getErrorMessage() {

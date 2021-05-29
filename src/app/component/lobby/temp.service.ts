@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
 export class TempService {
   constructor(private httpClient: HttpClient) {}
 
-  getAvailableCodes(): Observable<string[]> {
+  getAvailableCode(): Observable<string> {
     const endpoint = environment.apiUrl + '/codes';
-    return this.httpClient.get<string[]>(endpoint);
+    return this.httpClient.get<string>(endpoint);
   }
 }
