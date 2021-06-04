@@ -8,7 +8,7 @@ export class TempService {
   constructor(private httpClient: HttpClient) {}
 
   getAvailableCode(): Observable<string> {
-    const endpoint = environment.apiUrl + '/codes';
+    const endpoint = environment.apiUrl + '/code';
     return this.httpClient.get<string>(endpoint);
   }
 }
