@@ -28,6 +28,7 @@
   &-answer-group {
     display: flex;
     flex-direction: column;
+    padding-left: 10px;
     .elaborator-question-answer.read-only.mat-radio-disabled
       .mat-radio-label-content {
       color: map-get($mat-dark-theme-foreground, text);

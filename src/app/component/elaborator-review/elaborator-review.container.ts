@@ -218,7 +218,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 
   private loadScoreChart(maxScore: number) {
     // prettier-ignore
-    const labels = ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200', '220', '240', '260', '280'];
+    const labels = ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200', '220', '240', '260'];
     // prettier-ignore
     const data: Chart.ChartData = {
       labels,
@@ -228,7 +228,9 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
           radius: (context) => {
             const index = context.dataIndex;
             const xValue = Number(labels[index]);
-            if (Math.abs(this.score - xValue) <= 10) {
+            const distanceFromScore = this.score - xValue;
+            // the first label that exeeds score should mark the score
+            if (distanceFromScore <= 0 && distanceFromScore > -20) {
               return 4;
             }
             return 0;
@@ -264,7 +266,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
   // 1/(20*sqrt(2*pi))*e^(-1/2*((x-maxScore*0.6)/30)^2)*10^4
   private getData(maxScore: number) {
     const dataSetData = [];
-    for (let x = 0; x < 300; x += 20) {
+    for (let x = 0; x < 280; x += 20) {
       // prettier-ignore
       const currentData = ( Math.E ** (-0.5 * ( (x-maxScore*0.6)/30) ** 2 ) ) / (20 * Math.sqrt(2*Math.PI) ) * 10**4;
       dataSetData.push(currentData);

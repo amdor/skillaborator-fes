@@ -1,9 +1,11 @@
+@import "~@angular/material/theming";
+
 .sk-lobby {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
-  justify-content: center;
+  justify-content: flex-start;
 
   &-footer {
     height: 75px;
@@ -11,5 +13,15 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+  }
+
+  &-description {
+    margin: 20px 20px;
+    text-align: justify;
+
+    h1 {
+      text-align: center;
+      color: mat-color($mat-purple, 300);
+    }
   }
 }

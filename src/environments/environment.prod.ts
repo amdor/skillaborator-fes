@@ -3,6 +3,6 @@ export const environment = {
   apiUrl: 'https://skillaborator-bes.herokuapp.com',
   questionEndpoint: '/question',
   selectedAnswersEndpoint: '/selectedAnswers',
-  maxQuestionCount: 10,
+  maxQuestionCount: 15,
   questionTimeout: 60,
 };

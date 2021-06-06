@@ -1,7 +1,19 @@
+<div class="sk-lobby-description">
+  <h1>Elaborate your frontend skills with Skillaborator!</h1>
+  <h3>
+    What does it take to be a great frontend engineer?
+    <p>
+      Focus, commitment and sheer F will. Other than that, you might need to
+      understand TypeScript/JavaScript, HTML, CSS, networking, software design
+      to mention a few. After you have the results, you can revisit it anytime
+      with the link.
+    </p>
+  </h3>
+</div>
+
 <mat-form-field appearance="fill" hideRequiredMarker>
   <mat-label>Enter one time code</mat-label>
   <input matInput placeholder="Code" [formControl]="oneTimeCode" required />
-  <!-- TODO hint -->
   <mat-hint *ngIf="!oneTimeCode.invalid && !oneTimeCode.value"
     >Enter one time code to start</mat-hint
   >
