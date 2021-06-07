@@ -18,10 +18,32 @@
   &-description {
     margin: 20px 20px;
     text-align: justify;
+    @media only screen and (min-width: 800px) {
+      width: 700px;
+    }
 
     h1 {
       text-align: center;
       color: mat-color($mat-purple, 300);
+    }
+
+    ul {
+      list-style-type: disc;
+      padding: revert;
+    }
+  }
+
+  & &-start {
+    margin-top: 20px;
+  }
+
+  & &-contact-link {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+
+    &.mat-button:hover .mat-button-focus-overlay {
+      opacity: 0;
     }
   }
 }
