@@ -32,6 +32,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NotificationComponent } from './component/notification/notification.component';
 import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
 import { CountdownClockComponent } from './component/elaborator-question/countdown-clock/countdown-clock.component';
+import { ContactFooterComponent } from './component/contact-footer/contact-footer.component';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -51,6 +52,7 @@ const httpInterceptorProviders = [
     LobbyComponent,
     NotificationComponent,
     CountdownClockComponent,
+    ContactFooterComponent,
   ],
   imports: [
     BrowserModule,

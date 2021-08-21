@@ -1,0 +1,17 @@
+.sk-contact-footer {
+    &-links{
+        display: flex;
+        align-items: center;
+        position: fixed;
+        bottom: 12px;
+        right: 12px;
+    
+        &.mat-button:hover .mat-button-focus-overlay {
+          opacity: 0;
+        }
+    
+        a, img {
+          height: 36px;
+        }
+    }
+  }

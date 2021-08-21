@@ -8,10 +8,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { skip, tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import {
   ElaboratorAction,
   getCurrentQuestion,
