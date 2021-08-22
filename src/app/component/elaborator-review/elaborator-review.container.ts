@@ -19,11 +19,10 @@ import {
   getSelectedAndRightAnswers,
   getScore,
   getOneTimeCode,
-  ElaboratorAction,
   ReviewAction,
 } from '../../state';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Chart } from 'chart.js';
+import { ActivatedRoute, Router } from '@angular/router';
+import type { Chart } from 'chart.js';
 import { ProfessionalLevel } from './elaborator-review.model';
 
 enum AnswerSummaryState {
@@ -68,6 +67,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
   private _scoreChart: ElementRef | undefined;
   private chart: Chart | undefined;
   private maxScore: number;
+  private chartModule: Promise<typeof Chart> | undefined;
   private readonly scoreBase = 10;
 
   constructor(
@@ -75,7 +75,9 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
     private cdRef: ChangeDetectorRef,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    this.loadChartModule();
+  }
 
   ngOnInit() {
     this.data$$ = combineLatest([
@@ -216,7 +218,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadScoreChart(maxScore: number) {
+  private async loadScoreChart(maxScore: number) {
     // prettier-ignore
     const labels = ['0', '20', '40', '60', '80', '100', '120', '140', '160', '180', '200', '220', '240', '260'];
     // prettier-ignore
@@ -240,7 +242,8 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
     };
     // score chart
     const ctx = this._scoreChart.nativeElement.getContext('2d');
-    this.chart = new Chart(ctx, {
+    const chartModule = await this.chartModule; 
+    this.chart = new chartModule.Chart(ctx, {
       type: 'line',
       data,
       options: {
@@ -272,5 +275,9 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
       dataSetData.push(currentData);
     }
     return dataSetData;
+  }
+
+  private async loadChartModule() {
+    this.chartModule = import('chart.js');
   }
 }
