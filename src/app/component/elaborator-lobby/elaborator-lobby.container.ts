@@ -6,6 +6,7 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   ViewEncapsulation,
+  Input,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
@@ -19,6 +20,7 @@ import { AppState } from './../../app.module';
 import { ConfigService } from './../../service';
 import { tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'sk-elaborator-lobby',
@@ -30,6 +32,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   @HostBinding('class.elaborator-lobby') hostCss = true;
 
+  @Input()
+  get demo(): boolean {
+    return this.#demo;
+  }
+  set demo(val: boolean) {
+    this.#demo = coerceBooleanProperty(val);
+  }
+
   question: Question | undefined;
   isLoadingQuestion = true;
   currentQuestionNumber = 0;
@@ -37,6 +47,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   readonly maxQuestionCount: number;
 
   private data$$: Subscription;
+  #demo: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -45,7 +56,9 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     configService: ConfigService
   ) {
-    this.maxQuestionCount = configService.getMaxQuestionsCount();
+    this.maxQuestionCount = this.#demo
+      ? configService.getMaxDemoQuestionsCount()
+      : configService.getMaxQuestionsCount();
   }
 
   ngOnInit() {
@@ -96,9 +109,8 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
   onElaborationFinished(selectedAnswerIds: string[]) {
     this.saveAnswer(selectedAnswerIds);
 
-    const oneTimeCode = this.activatedRoute.snapshot.paramMap.get(
-      'oneTimeCode'
-    );
+    const oneTimeCode =
+      this.activatedRoute.snapshot.paramMap.get('oneTimeCode');
     this.store.dispatch(
       ElaboratorAction.evaluateAnswers(
         oneTimeCode,

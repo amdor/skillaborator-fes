@@ -30,10 +30,18 @@
 >
   Start skillaboration
 </button>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="startDemo()"
+  [disabled]="loading"
+  class="sk-lobby-start"
+>
+  Start demo
+</button>
 <div class="sk-lobby-footer">
   <mat-spinner [diameter]="50" *ngIf="loading"></mat-spinner>
   <sk-notification></sk-notification>
 </div>
-
 
 <sk-contact-footer></sk-contact-footer>

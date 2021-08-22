@@ -12,13 +12,13 @@ export namespace ElaboratorAction {
     `${ACTION_PREFIX} Get Question`,
     (selectedAnswerIds: string[], timedOut: boolean = false) => ({
       selectedAnswerIds,
-      timedOut
+      timedOut,
     })
   );
 
   export const getFirstQuestion = createAction(
     `${ACTION_PREFIX} Get First Question`,
-    (oneTimeCode: string) => ({ oneTimeCode })
+    (oneTimeCode?: string) => ({ oneTimeCode })
   );
 
   export const getQuestionSuccess = createAction(
@@ -37,10 +37,14 @@ export namespace ElaboratorAction {
 
   export const evaluateAnswers = createAction(
     `${ACTION_PREFIX} Evaluate Answers`,
-    (oneTimeCode: string, selectedAnswerIds: string[], timedOut: boolean = false) => ({
+    (
+      oneTimeCode: string,
+      selectedAnswerIds: string[],
+      timedOut: boolean = false
+    ) => ({
       oneTimeCode,
       selectedAnswerIds,
-      timedOut
+      timedOut,
     })
   );
 
@@ -58,7 +62,5 @@ export namespace ElaboratorAction {
     `${ACTION_PREFIX} Evaluate Answers Fail`
   );
 
-  export const reset = createAction(
-    `${ACTION_PREFIX} Reset`
-  );
+  export const reset = createAction(`${ACTION_PREFIX} Reset`);
 }

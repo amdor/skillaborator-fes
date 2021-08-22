@@ -33,9 +33,10 @@ export class ElaboratorService {
     });
   }
 
-  getFirstQuestion(oneTimeCode: string): Observable<Question> {
-    const questionEndpoint =
-      this.config.getQuestionEndpoint() + `/${oneTimeCode}`;
+  getFirstQuestion(oneTimeCode?: string): Observable<Question> {
+    const questionEndpoint = oneTimeCode
+      ? this.config.getQuestionEndpoint() + `/${oneTimeCode}`
+      : this.config.getQuestionEndpoint();
     return this.getQuestionWithEndpoint(questionEndpoint);
   }
 

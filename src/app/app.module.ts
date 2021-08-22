@@ -33,6 +33,7 @@ import { NotificationComponent } from './component/notification/notification.com
 import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
 import { CountdownClockComponent } from './component/elaborator-question/countdown-clock/countdown-clock.component';
 import { ContactFooterComponent } from './component/contact-footer/contact-footer.component';
+import { DemoComponent } from './component/elaborator-lobby/demo/demo.component';
 
 export interface AppState {
   elaborator: ElaboratorState;
@@ -53,6 +54,7 @@ const httpInterceptorProviders = [
     NotificationComponent,
     CountdownClockComponent,
     ContactFooterComponent,
+    DemoComponent,
   ],
   imports: [
     BrowserModule,

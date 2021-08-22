@@ -4,5 +4,6 @@ export const environment = {
   questionEndpoint: '/question',
   selectedAnswersEndpoint: '/selectedAnswers',
   maxQuestionCount: 15,
+  maxDemoQuestionCount: 2,
   questionTimeout: 60,
 };
