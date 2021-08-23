@@ -37,8 +37,11 @@
     display: flex;
     margin-top: 10px;
     align-items: stretch;
-    width: 80%;
     flex-direction: column;
+
+    @media only screen and (max-width: 768px) {
+      width: 80%;
+    }
 
     span {
       margin-top: 12px;
