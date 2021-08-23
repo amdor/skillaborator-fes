@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { DemoComponent } from './component/elaborator-lobby/demo/demo.component';
 import { ElaboratorLobbyComponent } from './component/elaborator-lobby/elaborator-lobby.container';
 import { ElaboratorReviewLobbyComponent } from './component/elaborator-review/elaborator-review.container';
 import { LobbyComponent } from './component/lobby/lobby.component';
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'review/:oneTimeCode',
     component: ElaboratorReviewLobbyComponent,
+  },
+  {
+    path: 'demo/:oneTimeCode',
+    component: DemoComponent,
   },
   {
     path: '**',

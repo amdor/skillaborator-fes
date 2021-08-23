@@ -11,6 +11,10 @@ export class ConfigService {
     return environment.maxQuestionCount;
   }
 
+  getMaxDemoQuestionsCount(): number {
+    return environment.maxDemoQuestionCount;
+  }
+
   getSelectedAnswersEndpoint(): string {
     return environment.apiUrl + environment.selectedAnswersEndpoint;
   }

@@ -4,6 +4,7 @@ export interface Question {
   answers: Answer[];
   multi: boolean;
   code?: Code;
+  oneTimeCode?: string;
 }
 
 export interface Answer {
