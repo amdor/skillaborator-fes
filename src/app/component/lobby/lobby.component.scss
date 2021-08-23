@@ -33,7 +33,16 @@
     }
   }
 
-  & &-start {
-    margin-top: 20px;
+  & &-start-buttons {
+    display: flex;
+    margin-top: 10px;
+    align-items: stretch;
+    width: 80%;
+    flex-direction: column;
+
+    span {
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
   }
 }
