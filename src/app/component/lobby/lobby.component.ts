@@ -8,11 +8,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import {
+  AuthAction,
   ElaboratorAction,
   getCurrentQuestion,
   getLoadingCurrentQuestion,
@@ -32,7 +33,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   oneTimeCode = new FormControl('', [Validators.required]);
   loading = false;
 
-  private loading$$: Subscription;
+  private mainSubscription$$: Subscription;
   private getCurrentQuestion$$: Subscription | undefined;
   private lastRequestedOneTimeCode: string;
 
@@ -40,21 +41,33 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private cdRef: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.store.dispatch(ElaboratorAction.reset());
-    this.loading$$ = this.store.select(getLoadingCurrentQuestion).subscribe({
-      next: (loading) => {
-        this.loading = loading;
-        this.cdRef.markForCheck();
-      },
-    });
+    this.mainSubscription$$ = this.store
+      .select(getLoadingCurrentQuestion)
+      .subscribe({
+        next: (loading) => {
+          this.loading = loading;
+          this.cdRef.markForCheck();
+        },
+      });
+    this.mainSubscription$$.add(
+      this.activatedRoute.queryParams.subscribe((params) => {
+        const authorizationCode = params['code'];
+        if (!authorizationCode) {
+          return;
+        }
+        this.store.dispatch(AuthAction.authenticate(authorizationCode));
+      })
+    );
   }
 
   ngOnDestroy() {
     this.getCurrentQuestion$$?.unsubscribe();
-    this.loading$$?.unsubscribe();
+    this.mainSubscription$$?.unsubscribe();
   }
 
   getErrorMessage() {

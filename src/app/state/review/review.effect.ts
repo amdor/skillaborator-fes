@@ -17,7 +17,7 @@ export class ReviewEffect {
     this.actions$.pipe(
       ofType(ReviewAction.getEvaluationResults),
       mergeMap(({ oneTimeCode }) =>
-        this.service.getSelectedAnswers().pipe(
+        this.service.getSelectedAnswers$().pipe(
           map(
             ({
               questionsWithRightAnswers,

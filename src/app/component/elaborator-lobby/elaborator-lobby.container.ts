@@ -22,6 +22,7 @@ import { tap } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
+// TODO stop unintended back navigation, navigation elsewhere
 @Component({
   selector: 'sk-elaborator-lobby',
   templateUrl: './elaborator-lobby.container.html',

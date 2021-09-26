@@ -13,6 +13,8 @@ export {
 export { ReviewAction } from './review/review.action';
 export { ReviewEffect } from './review/review.effect';
 export { ReviewState, reviewReducer } from './review/review.reducer';
+export { AuthEffect } from './auth/auth.effect';
+export { AuthAction } from './auth/auth.action';
 export {
   getScore,
   getSelectedAndRightAnswers,

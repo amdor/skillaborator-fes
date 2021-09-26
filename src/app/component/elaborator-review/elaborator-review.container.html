@@ -19,7 +19,9 @@
       {{ score }} points
     </span>
     <span class="elaborator-review-score-container-message">
-      {{ scoreMessage }}
+      {{ scoreMessage }} <br />
+      Save the URL to be able to check your results later, or share it with
+      friends
     </span>
   </div>
   <div class="elaborator-review-score-chart-container">
@@ -74,5 +76,5 @@
 
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <sk-notification></sk-notification>
-<!-- TODO fix layout -->
+<!-- TODO style this properly -->
 <!-- <sk-contact-footer></sk-contact-footer> -->

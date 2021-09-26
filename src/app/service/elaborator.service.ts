@@ -18,7 +18,7 @@ export interface RequestProps {
 export class ElaboratorService {
   constructor(private httpClient: HttpClient, private config: ConfigService) {}
 
-  private getQuestionWithEndpoint(
+  private getQuestionWithEndpoint$(
     questionEndpoint: string,
     requestProps?: RequestProps
   ): Observable<Question> {
@@ -33,19 +33,19 @@ export class ElaboratorService {
     });
   }
 
-  getFirstQuestion(oneTimeCode?: string): Observable<Question> {
+  getFirstQuestion$(oneTimeCode?: string): Observable<Question> {
     const questionEndpoint = oneTimeCode
       ? this.config.getQuestionEndpoint() + `/${oneTimeCode}`
       : this.config.getQuestionEndpoint();
-    return this.getQuestionWithEndpoint(questionEndpoint);
+    return this.getQuestionWithEndpoint$(questionEndpoint);
   }
 
-  getNextQuestion(props: { answerIds: string[]; timedOut: boolean }) {
+  getNextQuestion$(props: { answerIds: string[]; timedOut: boolean }) {
     const questionEndpoint = this.config.getQuestionEndpoint();
-    return this.getQuestionWithEndpoint(questionEndpoint, props);
+    return this.getQuestionWithEndpoint$(questionEndpoint, props);
   }
 
-  putSelectedAnswers(requestProps: RequestProps): Observable<EvaluationResult> {
+  putSelectedAnswers$(requestProps: RequestProps): Observable<EvaluationResult> {
     const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
 
     const requestParams = this.getRequestParams(requestProps);
@@ -57,7 +57,7 @@ export class ElaboratorService {
     );
   }
 
-  getSelectedAnswers(): Observable<GetSelectedAnswersResponse> {
+  getSelectedAnswers$(): Observable<GetSelectedAnswersResponse> {
     const selectedAnswersEndpoint = this.config.getSelectedAnswersEndpoint();
     return this.httpClient.get<GetSelectedAnswersResponse>(
       selectedAnswersEndpoint
