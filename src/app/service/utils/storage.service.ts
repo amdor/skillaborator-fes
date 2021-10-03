@@ -1,4 +1,5 @@
 export const SELECTED_ANSWERS_STORAGE_KEY = 'selectedAnswers';
+export const AUTH_STORAGE_KEY = 'authStateKey';
 
 export enum StorageType {
   Local,

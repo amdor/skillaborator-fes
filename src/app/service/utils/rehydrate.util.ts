@@ -7,14 +7,20 @@ import {
 import { StorageService, StorageType } from './storage.service';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 
+export interface RehydrateOptions {
+  key: string;
+  storageType?: StorageType;
+}
+
 export function createRehydrateReducer<S, A extends Action = Action>(
-  key: string,
+  options: RehydrateOptions,
   initialState: S,
   ...ons: ReducerTypes<S, ActionCreator[]>[]
 ): ActionReducer<S, A> {
+  const storageType = options.storageType ?? StorageType.Local;
   // rehydrate
   const newInitialState =
-    StorageService.getForKey(key, StorageType.Local) ?? initialState;
+    StorageService.getForKey(options.key, storageType) ?? initialState;
 
   // new reducers save state to localstorage
   const newOns: ReducerTypes<S, ActionCreator[]>[] = [];
@@ -24,7 +30,7 @@ export function createRehydrateReducer<S, A extends Action = Action>(
       action: A
     ) => {
       const newState = oldOn.reducer(state, action);
-      StorageService.setForKey(key, newState, StorageType.Local);
+      StorageService.setForKey(options.key, newState, storageType);
       return newState;
     };
     newOns.push({ ...oldOn, reducer: newReducer });

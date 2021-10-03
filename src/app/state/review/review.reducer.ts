@@ -16,7 +16,7 @@ export interface ReviewState {
   oneTimeCode: string;
 }
 
-const initialState = {
+const initialState: ReviewState = {
   selectedAndRightAnswers: [],
   score: 0,
   questions: [],
@@ -24,7 +24,7 @@ const initialState = {
 };
 
 export const reviewReducer = createRehydrateReducer(
-  SELECTED_ANSWERS_STORAGE_KEY,
+  { key: SELECTED_ANSWERS_STORAGE_KEY },
   initialState,
   on(
     ElaboratorAction.evaluateAnswersSuccess,

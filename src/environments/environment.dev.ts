@@ -7,9 +7,11 @@ export const environment = {
   apiUrl: 'http://api.app.localhost:5000',
   questionEndpoint: '/question',
   selectedAnswersEndpoint: '/selectedAnswers',
-  maxQuestionCount: 2,
+  login: '/linkedin-login',
+  newCode: '/new-code',
+  maxQuestionCount: 10,
   maxDemoQuestionCount: 2,
-  questionTimeout: 60
+  questionTimeout: 60,
 };
 
 /*

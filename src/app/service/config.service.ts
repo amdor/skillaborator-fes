@@ -18,4 +18,12 @@ export class ConfigService {
   getSelectedAnswersEndpoint(): string {
     return environment.apiUrl + environment.selectedAnswersEndpoint;
   }
+
+  getLinkedInLoginEndpoint(): string {
+    return environment.apiUrl + environment.login;
+  }
+
+  getNewCodeEndpoint(): string {
+    return environment.apiUrl + environment.newCode;
+  }
 }
