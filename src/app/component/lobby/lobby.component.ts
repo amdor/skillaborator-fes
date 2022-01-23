@@ -11,13 +11,14 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter, take, withLatestFrom } from 'rxjs/operators';
-import { getAccessToken } from 'src/app/state/auth/auth.selector';
+import { filter, switchMapTo, withLatestFrom } from 'rxjs/operators';
 import {
 	AuthAction,
 	ElaboratorAction,
 	getCurrentQuestion,
 	getLoadingCurrentQuestion,
+	getAccessToken,
+	getEmail,
 } from '../../state';
 import { Question } from '../elaborator-question.model';
 
@@ -34,6 +35,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 	signInLink: string;
 	oneTimeCode = new FormControl('', [Validators.required]);
 	loading = false;
+	email = '';
 
 	private mainSubscription$$: Subscription;
 	private getCurrentQuestion$$: Subscription | undefined;
@@ -60,9 +62,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
 					this.cdRef.markForCheck();
 				},
 			});
-		const accessToken$ = this.store
-			.select(getAccessToken)
-			.pipe(filter(Boolean));
+		const accessToken$ = this.store.select(getAccessToken);
+
 		this.mainSubscription$$.add(
 			this.activatedRoute.queryParams
 				.pipe(withLatestFrom(accessToken$))
@@ -75,6 +76,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
 						AuthAction.authenticate(authorizationCode)
 					);
 				})
+		);
+		this.mainSubscription$$.add(
+			accessToken$
+				.pipe(filter(Boolean), switchMapTo(this.store.select(getEmail)))
+				.subscribe(email => this.email = email)
 		);
 	}
 

@@ -21,3 +21,5 @@ export {
 	getQuestions,
 	getOneTimeCode,
 } from './review/review.selector';
+
+export { getAccessToken, getEmail } from './auth/auth.selector';

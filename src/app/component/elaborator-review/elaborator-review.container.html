@@ -1,77 +1,79 @@
 <a
-  mat-raised-button
-  color="primary"
-  class="elaborator-review-new-evaluation"
-  routerLink="/"
+	mat-raised-button
+	color="primary"
+	class="elaborator-review-new-evaluation"
+	routerLink="/"
 >
-  New evaluation
+	New evaluation
 </a>
 <div *ngIf="!isLoading" class="elaborator-review-container">
-  <div
-    class="elaborator-review-score-container"
-    [ngClass]="{
+	<div
+		class="elaborator-review-score-container"
+		[ngClass]="{
       beginner: professionalLevel === professionalLevels.Beginner,
       medior: professionalLevel === professionalLevels.Medior,
       pro: professionalLevel === professionalLevels.Pro
     }"
-  >
-    <span class="elaborator-review-score-container-score">
-      {{ score }} points
-    </span>
-    <span class="elaborator-review-score-container-message">
-      {{ scoreMessage }} <br />
-      Save the URL to be able to check your results later, or share it with
-      friends
-    </span>
-  </div>
-  <div class="elaborator-review-score-chart-container">
-    <canvas #scoreChart></canvas>
-  </div>
-  <mat-accordion class="elaborator-review-accordion">
-    <mat-expansion-panel *ngFor="let question of questions; index as i">
-      <mat-expansion-panel-header>
-        <mat-panel-title> {{ i }}. {{ question.value }} </mat-panel-title>
-        <mat-panel-description
-          [ngSwitch]="
+	>
+		<span class="elaborator-review-score-container-score">
+			{{ score }} points
+		</span>
+		<span class="elaborator-review-score-container-message">
+			{{ scoreMessage }} <br />
+			Save the URL to be able to check your results later, or share it
+			with friends
+		</span>
+	</div>
+	<div class="elaborator-review-score-chart-container">
+		<canvas #scoreChart></canvas>
+	</div>
+	<mat-accordion class="elaborator-review-accordion">
+		<mat-expansion-panel *ngFor="let question of questions; index as i">
+			<mat-expansion-panel-header>
+				<mat-panel-title>
+					{{ i }}. {{ question.value }}
+				</mat-panel-title>
+				<mat-panel-description
+					[ngSwitch]="
             selectedAndRightAnswersMap?.get(question.id).answerSummaryState
           "
-        >
-          <mat-icon
-            *ngSwitchCase="answerSummaryState.Right"
-            class="right-answer"
-            svgIcon="done"
-            aria-hidden="false"
-            aria-label="Good answer icon"
-          ></mat-icon>
-          <mat-icon
-            *ngSwitchCase="answerSummaryState.Wrong"
-            class="wrong-answer"
-            svgIcon="close"
-            aria-hidden="false"
-            aria-label="Bad answer icon"
-          ></mat-icon>
-          <mat-icon
-            *ngSwitchCase="answerSummaryState.PartialWrong"
-            class="missed-answer"
-            svgIcon="remove"
-            aria-hidden="false"
-            aria-label="Bad answer icon"
-          ></mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
+				>
+					<mat-icon
+						*ngSwitchCase="answerSummaryState.Right"
+						class="right-answer"
+						svgIcon="done"
+						aria-hidden="false"
+						aria-label="Good answer icon"
+					></mat-icon>
+					<mat-icon
+						*ngSwitchCase="answerSummaryState.Wrong"
+						class="wrong-answer"
+						svgIcon="close"
+						aria-hidden="false"
+						aria-label="Bad answer icon"
+					></mat-icon>
+					<mat-icon
+						*ngSwitchCase="answerSummaryState.PartialWrong"
+						class="missed-answer"
+						svgIcon="remove"
+						aria-hidden="false"
+						aria-label="Bad answer icon"
+					></mat-icon>
+				</mat-panel-description>
+			</mat-expansion-panel-header>
 
-      <ng-template matExpansionPanelContent>
-        <sk-elaborator-question
-          [question]="question"
-          [currentQuestionNumber]="i"
-          [selectedAndRightAnswer]="
+			<ng-template matExpansionPanelContent>
+				<sk-elaborator-question
+					[question]="question"
+					[currentQuestionNumber]="i"
+					[selectedAndRightAnswer]="
             selectedAndRightAnswersMap?.get(question.id)
           "
-          readOnly
-        ></sk-elaborator-question>
-      </ng-template>
-    </mat-expansion-panel>
-  </mat-accordion>
+					readOnly
+				></sk-elaborator-question>
+			</ng-template>
+		</mat-expansion-panel>
+	</mat-accordion>
 </div>
 
 <mat-spinner *ngIf="isLoading"></mat-spinner>

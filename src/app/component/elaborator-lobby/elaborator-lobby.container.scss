@@ -1,13 +1,13 @@
 .elaborator-lobby {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  mat-spinner {
-    margin: auto;
-  }
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	mat-spinner {
+		margin: auto;
+	}
 
-  .elaborator-question {
-    margin: 12px 18px 12px 18px;
-    overflow: auto;
-  }
+	.elaborator-question {
+		margin: 12px 18px 12px 18px;
+		overflow: auto;
+	}
 }

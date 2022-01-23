@@ -1,50 +1,53 @@
+<a [href]="signInLink" mat-button class="sk-lobby-login">Sign in</a>
+
 <div class="sk-lobby-description">
-  <h1>Elaborate your frontend skills with Skillaborator!</h1>
-  <div class="mat-body-1">
-    What does it take to be a great frontend engineer?
-    <p>
-      Focus, commitment and sheer F will. Other than that, you might need to
-      understand TypeScript/JavaScript, HTML, CSS, networking, software design
-      to mention a few. Here's the opportunity to test your skills!
-    </p>
-    <ul class="mat-body-2">
-      <li>Start skillaboration (takes about 15 minutes, cannot be paused)</li>
-      <li>Answer the questions</li>
-      <li>See and share the results via the review page link</li>
-    </ul>
-  </div>
+	<h1>Elaborate your frontend skills with Skillaborator!</h1>
+	<div class="mat-body-1">
+		What does it take to be a great frontend engineer?
+		<p>
+			Focus, commitment and sheer F will. Other than that, you might need
+			to understand TypeScript/JavaScript, HTML, CSS, networking, software
+			design to mention a few. Here's the opportunity to test your skills!
+		</p>
+		<ul class="mat-body-2">
+			<li>
+				Start skillaboration (takes about 15 minutes, cannot be paused)
+			</li>
+			<li>Answer the questions</li>
+			<li>See and share the results via the review page link</li>
+		</ul>
+	</div>
 </div>
 
 <mat-form-field appearance="fill" hideRequiredMarker>
-  <mat-label>Enter one time code</mat-label>
-  <input matInput placeholder="Code" [formControl]="oneTimeCode" required />
-  <mat-hint>Enter your code</mat-hint>
-  <mat-error *ngIf="oneTimeCode.invalid">{{ getErrorMessage() }}</mat-error>
+	<mat-label>Enter one time code</mat-label>
+	<input matInput placeholder="Code" [formControl]="oneTimeCode" required />
+	<mat-hint>Enter your code</mat-hint>
+	<mat-error *ngIf="oneTimeCode.invalid">{{ getErrorMessage() }}</mat-error>
 </mat-form-field>
 <div class="sk-lobby-start-buttons">
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="startSkillaboration()"
-    [disabled]="loading || !oneTimeCode.value || oneTimeCode.invalid"
-    class="sk-lobby-start"
-  >
-    Start skillaboration
-  </button>
-  <span>Or try out our demo:</span>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="startDemo()"
-    [disabled]="loading"
-  >
-    Start demo
-  </button>
+	<button
+		mat-raised-button
+		color="primary"
+		(click)="startSkillaboration()"
+		[disabled]="loading || !oneTimeCode.value || oneTimeCode.invalid"
+		class="sk-lobby-start"
+	>
+		Start skillaboration
+	</button>
+	<span>Or try out our demo:</span>
+	<button
+		mat-raised-button
+		color="primary"
+		(click)="startDemo()"
+		[disabled]="loading"
+	>
+		Start demo
+	</button>
 </div>
 <div class="sk-lobby-footer" *ngIf="loading">
-  <mat-spinner [diameter]="50"></mat-spinner>
-  <sk-notification></sk-notification>
+	<mat-spinner [diameter]="50"></mat-spinner>
+	<sk-notification></sk-notification>
 </div>
-<a [href]="signInLink" mat-button>Sign in</a>
 
 <sk-contact-footer></sk-contact-footer>

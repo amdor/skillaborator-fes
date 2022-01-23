@@ -2,42 +2,44 @@
 @import "../elaborator-question/elaborator-question.theme";
 
 @mixin elaborator-review-theme($theme) {
-  $color-config: mat-get-color-config($theme);
-  $typography-config: mat-typography-config();
+	$color-config: mat-get-color-config($theme);
+	$typography-config: mat-typography-config();
 
-  // Extract the palettes you need from the theme definition.
-  $primary: map-get($color-config, primary);
+	// Extract the palettes you need from the theme definition.
+	$primary: map-get($color-config, primary);
 
-  .elaborator-review {
-    &-score-container {
-      &.beginner {
-        color: mat-color($mat-light-blue, 400);
-      }
-      &.medior {
-        color: mat-color($mat-indigo, 400);
-      }
-      &.pro {
-        color: mat-color($primary);
-      }
+	.elaborator-review {
+		&-score-container {
+			&.beginner {
+				color: mat-color($mat-light-blue, 400);
+			}
+			&.medior {
+				color: mat-color($mat-indigo, 400);
+			}
+			&.pro {
+				color: mat-color($primary);
+			}
 
-      &-score {
-        font-size: 2rem;
-        line-height: 2rem;
-      }
+			&-score {
+				font-size: 2rem;
+				line-height: 2rem;
+			}
 
-      &-message {
-        font-size: 1rem;
-        line-height: 1.1rem;
-      }
-    }
+			&-message {
+				font-size: 1rem;
+				line-height: 1.1rem;
+			}
+		}
 
-    @include elaborator-question-theme(
-      (
-        "headline-font-size": mat-font-size($typography-config, title),
-        "headline-line-height": mat-line-height($typography-config, title),
-        "content-font-size": mat-font-size($typography-config, body-1),
-        "content-line-height": mat-line-height($typography-config, body-1),
-      )
-    );
-  }
+		@include elaborator-question-theme(
+			(
+				"headline-font-size": mat-font-size($typography-config, title),
+				"headline-line-height":
+					mat-line-height($typography-config, title),
+				"content-font-size": mat-font-size($typography-config, body-1),
+				"content-line-height":
+					mat-line-height($typography-config, body-1),
+			)
+		);
+	}
 }

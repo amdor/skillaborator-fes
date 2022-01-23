@@ -1,11 +1,11 @@
 <sk-elaborator-question
-  *ngIf="!isLoadingQuestion && question"
-  [question]="question"
-  [currentQuestionNumber]="currentQuestionNumber"
-  [maxQuestionCount]="maxQuestionCount"
-  (nextQuestionClick)="getNextQuestion($event)"
-  (elaborationFinished)="onElaborationFinished($event)"
-  (questionTimeout)="onQuestionTimeout()"
+	*ngIf="!isLoadingQuestion && question"
+	[question]="question"
+	[currentQuestionNumber]="currentQuestionNumber"
+	[maxQuestionCount]="maxQuestionCount"
+	(nextQuestionClick)="getNextQuestion($event)"
+	(elaborationFinished)="onElaborationFinished($event)"
+	(questionTimeout)="onQuestionTimeout()"
 ></sk-elaborator-question>
 
 <mat-spinner *ngIf="isLoadingQuestion"></mat-spinner>
