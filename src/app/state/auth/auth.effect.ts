@@ -7,17 +7,17 @@ import { AuthAction } from './auth.action';
 
 @Injectable()
 export class AuthEffect {
-  authenticate$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(AuthAction.authenticate),
-      switchMap(({ authorizationCode }) =>
-        this.service.accessToken$(authorizationCode).pipe(
-          map((response) => AuthAction.authenticateSuccess(response)),
-          catchError(() => of(AuthAction.authenticateFail()))
-        )
-      )
-    )
-  );
+	authenticate$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(AuthAction.authenticate),
+			switchMap(({ authorizationCode }) =>
+				this.service.accessToken$(authorizationCode).pipe(
+					map((response) => AuthAction.authenticateSuccess(response)),
+					catchError(() => of(AuthAction.authenticateFail()))
+				)
+			)
+		)
+	);
 
-  constructor(private actions$: Actions, private service: AuthService) {}
+	constructor(private actions$: Actions, private service: AuthService) {}
 }

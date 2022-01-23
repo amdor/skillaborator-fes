@@ -13,13 +13,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { StoreModule } from '@ngrx/store';
 import {
-  ElaboratorEffect,
-  ElaboratorState,
-  elaboratorReducer,
-  ReviewState,
-  reviewReducer,
-  ReviewEffect,
-  AuthEffect,
+	ElaboratorEffect,
+	ElaboratorState,
+	elaboratorReducer,
+	ReviewState,
+	reviewReducer,
+	ReviewEffect,
+	AuthEffect,
 } from './state';
 import { EffectsModule } from '@ngrx/effects';
 import { MatListModule } from '@angular/material/list';
@@ -38,51 +38,55 @@ import { DemoComponent } from './component/elaborator-lobby/demo/demo.component'
 import { authReducer, AuthState } from './state/auth/auth.reducer';
 
 export interface AppState {
-  elaborator: ElaboratorState;
-  review: ReviewState;
-  auth: AuthState;
+	elaborator: ElaboratorState;
+	review: ReviewState;
+	auth: AuthState;
 }
 
 const httpInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: OneTimeCodeInterceptor, multi: true },
+	{
+		provide: HTTP_INTERCEPTORS,
+		useClass: OneTimeCodeInterceptor,
+		multi: true,
+	},
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ElaboratorLobbyComponent,
-    ElaboratorQuestionComponent,
-    ElaboratorReviewLobbyComponent,
-    LobbyComponent,
-    NotificationComponent,
-    CountdownClockComponent,
-    ContactFooterComponent,
-    DemoComponent,
-  ],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatRadioModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    MatListModule,
-    MatExpansionModule,
-    MatIconModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    StoreModule.forRoot({
-      elaborator: elaboratorReducer,
-      review: reviewReducer,
-      auth: authReducer,
-    }),
-    EffectsModule.forRoot([ElaboratorEffect, ReviewEffect, AuthEffect]),
-  ],
-  providers: [...httpInterceptorProviders],
-  bootstrap: [AppComponent],
+	declarations: [
+		AppComponent,
+		ElaboratorLobbyComponent,
+		ElaboratorQuestionComponent,
+		ElaboratorReviewLobbyComponent,
+		LobbyComponent,
+		NotificationComponent,
+		CountdownClockComponent,
+		ContactFooterComponent,
+		DemoComponent,
+	],
+	imports: [
+		BrowserModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		AppRoutingModule,
+		BrowserAnimationsModule,
+		MatRadioModule,
+		MatProgressSpinnerModule,
+		MatSnackBarModule,
+		MatButtonModule,
+		MatListModule,
+		MatExpansionModule,
+		MatIconModule,
+		MatCheckboxModule,
+		MatFormFieldModule,
+		MatInputModule,
+		StoreModule.forRoot({
+			elaborator: elaboratorReducer,
+			review: reviewReducer,
+			auth: authReducer,
+		}),
+		EffectsModule.forRoot([ElaboratorEffect, ReviewEffect, AuthEffect]),
+	],
+	providers: [...httpInterceptorProviders],
+	bootstrap: [AppComponent],
 })
 export class AppModule {}
