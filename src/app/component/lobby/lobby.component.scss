@@ -7,8 +7,8 @@
 	height: 100%;
 	justify-content: flex-start;
 
-	&-login {
-		float: right;
+	&-auth {
+        align-self: end;
 	}
 
 	&-footer {

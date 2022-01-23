@@ -2,6 +2,7 @@ import { AuthAction } from './auth.action';
 import { createRehydrateReducer, LoginResponse } from '../../service';
 import { AUTH_STORAGE_KEY } from '../../service/utils/storage.service';
 import { on } from '@ngrx/store';
+import { AppState } from 'src/app';
 
 export interface AuthState {
 	accessToken: string;
@@ -24,5 +25,6 @@ export const authReducer = createRehydrateReducer(
 			email,
 			accessToken: token,
 		};
-	})
+	}),
+	on(AuthAction.logout, () => initialState)
 );

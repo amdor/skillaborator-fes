@@ -78,9 +78,12 @@ export class LobbyComponent implements OnInit, OnDestroy {
 				})
 		);
 		this.mainSubscription$$.add(
-			accessToken$
-				.pipe(filter(Boolean), switchMapTo(this.store.select(getEmail)))
-				.subscribe(email => this.email = email)
+			this.store.select(getEmail).subscribe({
+				next: (email) => {
+					this.email = email;
+					this.cdRef.markForCheck();
+				},
+			})
 		);
 	}
 
@@ -131,5 +134,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 					this.router.navigate(['demo', question.oneTimeCode]);
 				},
 			});
+	}
+
+	logout() {
+		this.store.dispatch(AuthAction.logout());
 	}
 }

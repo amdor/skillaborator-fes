@@ -21,4 +21,8 @@ export namespace AuthAction {
 	export const authenticateFail = createAction(
 		`${ACTION_PREFIX} Authenticate Fail`
 	);
+
+    export const logout = createAction(
+        `${ACTION_PREFIX} Logout`
+    )
 }

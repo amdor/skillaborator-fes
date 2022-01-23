@@ -1,4 +1,18 @@
-<a [href]="signInLink" mat-button class="sk-lobby-login">Sign in</a>
+<div class="sk-lobby-auth">
+	<a
+		*ngIf="!email; else loggedIn"
+		[href]="signInLink"
+		mat-button
+		class="sk-lobby-login"
+		>Sign in</a
+	>
+	<ng-template #loggedIn>
+		<span>Logged in as {{ email }}</span>
+		<button mat-button class="sk-lobby-logout" (click)="logout()">
+			Logout
+		</button>
+	</ng-template>
+</div>
 
 <div class="sk-lobby-description">
 	<h1>Elaborate your frontend skills with Skillaborator!</h1>
