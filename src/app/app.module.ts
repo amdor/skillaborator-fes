@@ -35,10 +35,12 @@ import { OneTimeCodeInterceptor } from './service/one-time-code.interceptor';
 import { CountdownClockComponent } from './component/elaborator-question/countdown-clock/countdown-clock.component';
 import { ContactFooterComponent } from './component/contact-footer/contact-footer.component';
 import { DemoComponent } from './component/elaborator-lobby/demo/demo.component';
+import { authReducer, AuthState } from './state/auth/auth.reducer';
 
 export interface AppState {
   elaborator: ElaboratorState;
   review: ReviewState;
+  auth: AuthState;
 }
 
 const httpInterceptorProviders = [
@@ -76,6 +78,7 @@ const httpInterceptorProviders = [
     StoreModule.forRoot({
       elaborator: elaboratorReducer,
       review: reviewReducer,
+      auth: authReducer,
     }),
     EffectsModule.forRoot([ElaboratorEffect, ReviewEffect, AuthEffect]),
   ],

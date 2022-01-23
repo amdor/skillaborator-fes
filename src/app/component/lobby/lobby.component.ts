@@ -11,7 +11,8 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { getAccessToken } from 'src/app/state/auth/auth.selector';
 import {
   AuthAction,
   ElaboratorAction,
@@ -30,6 +31,7 @@ import { Question } from '../elaborator-question.model';
 export class LobbyComponent implements OnInit, OnDestroy {
   @HostBinding('class.sk-lobby') hostCss = true;
 
+  signInLink: string;
   oneTimeCode = new FormControl('', [Validators.required]);
   loading = false;
 
@@ -42,7 +44,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private router: Router,
     private cdRef: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    let ref = window.location.origin;
+    ref = encodeURIComponent(ref);
+    this.signInLink = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=779gcyc5z2xwnu&redirect_uri=${ref}&scope=r_emailaddress`;
+  }
 
   ngOnInit() {
     this.store.dispatch(ElaboratorAction.reset());
@@ -54,14 +60,19 @@ export class LobbyComponent implements OnInit, OnDestroy {
           this.cdRef.markForCheck();
         },
       });
+    const accessToken$ = this.store
+      .select(getAccessToken)
+      .pipe(filter(Boolean));
     this.mainSubscription$$.add(
-      this.activatedRoute.queryParams.subscribe((params) => {
-        const authorizationCode = params['code'];
-        if (!authorizationCode) {
-          return;
-        }
-        this.store.dispatch(AuthAction.authenticate(authorizationCode));
-      })
+      this.activatedRoute.queryParams
+        .pipe(withLatestFrom(accessToken$))
+        .subscribe(([params, accessToken]) => {
+          const authorizationCode = params['code'];
+          if (!authorizationCode || accessToken) {
+            return;
+          }
+          this.store.dispatch(AuthAction.authenticate(authorizationCode));
+        })
     );
   }
 

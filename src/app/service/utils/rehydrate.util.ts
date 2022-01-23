@@ -3,6 +3,7 @@ import {
   ActionReducer,
   createReducer,
   ActionCreator,
+  ActionType,
 } from '@ngrx/store';
 import { StorageService, StorageType } from './storage.service';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
@@ -27,7 +28,7 @@ export function createRehydrateReducer<S, A extends Action = Action>(
   ons.forEach((oldOn: ReducerTypes<S, ActionCreator[]>) => {
     const newReducer: ActionReducer<S, A> = (
       state: S | undefined,
-      action: A
+      action: ActionType<ActionCreator[][number]>
     ) => {
       const newState = oldOn.reducer(state, action);
       StorageService.setForKey(options.key, newState, storageType);

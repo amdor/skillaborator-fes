@@ -1,4 +1,5 @@
 import { createAction } from '@ngrx/store';
+import { LoginResponse } from 'src/app';
 
 const ACTION_PREFIX = 'Auth';
 
@@ -12,8 +13,8 @@ export namespace AuthAction {
 
   export const authenticateSuccess = createAction(
     `${ACTION_PREFIX} Authenticate Success`,
-    (response: any) => ({
-      response,
+    (response: LoginResponse) => ({
+      ...response,
     })
   );
 

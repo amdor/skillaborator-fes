@@ -45,9 +45,6 @@
   <mat-spinner [diameter]="50"></mat-spinner>
   <sk-notification></sk-notification>
 </div>
-<a
-  href="https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=779gcyc5z2xwnu&redirect_uri=http%3A%2F%2Flocalhost%3A4200&scope=r_emailaddress"
-  >Sign in</a
->
+<a [href]="signInLink" mat-button>Sign in</a>
 
 <sk-contact-footer></sk-contact-footer>
