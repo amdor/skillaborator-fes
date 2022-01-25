@@ -1,14 +1,14 @@
 <div class="sk-lobby-auth">
 	<a
-		*ngIf="!email; else loggedIn"
+		*ngIf="!auth?.email; else loggedIn"
 		[href]="signInLink"
-		mat-button
-		class="sk-lobby-login"
+		mat-flat-button
+		class="sk-lobby-auth-login"
 		>Sign in</a
 	>
 	<ng-template #loggedIn>
-		<span>Logged in as {{ email }}</span>
-		<button mat-button class="sk-lobby-logout" (click)="logout()">
+		<span>Logged in as {{ auth.email }}</span>
+		<button mat-flat-button class="sk-lobby-auth-logout" (click)="logout()">
 			Logout
 		</button>
 	</ng-template>
@@ -24,23 +24,30 @@
 			design to mention a few. Here's the opportunity to test your skills!
 		</p>
 		<ul class="mat-body-2">
+			<li>Sign in with LinkedIn</li>
 			<li>
 				Start skillaboration (takes about 15 minutes, cannot be paused)
 			</li>
 			<li>Answer the questions</li>
 			<li>See and share the results via the review page link</li>
+			<li>Come back in two weeks and try again</li>
 		</ul>
 	</div>
 </div>
 
-<mat-form-field appearance="fill" hideRequiredMarker>
+<h2 *ngIf="auth?.nextSkillaborationStart && !canStart">
+	New skillaboration can be started after {{ auth.nextSkillaborationStart }}
+</h2>
+
+<!-- USING PREREGISTERED ONE TIME CODES -->
+<!-- <mat-form-field appearance="fill" hideRequiredMarker>
 	<mat-label>Enter one time code</mat-label>
 	<input matInput placeholder="Code" [formControl]="oneTimeCode" required />
 	<mat-hint>Enter your code</mat-hint>
 	<mat-error *ngIf="oneTimeCode.invalid">{{ getErrorMessage() }}</mat-error>
-</mat-form-field>
+</mat-form-field> -->
 <div class="sk-lobby-start-buttons">
-	<button
+	<!-- <button
 		mat-raised-button
 		color="primary"
 		(click)="startSkillaboration()"
@@ -48,8 +55,19 @@
 		class="sk-lobby-start"
 	>
 		Start skillaboration
+	</button> -->
+	<button
+		mat-raised-button
+		color="primary"
+		(click)="startSkillaboration()"
+		[disabled]="loading"
+		class="sk-lobby-start"
+		*ngIf="canStart"
+	>
+		Start skillaboration
 	</button>
-	<span>Or try out our demo:</span>
+
+	<span>Try out the demo:</span>
 	<button
 		mat-raised-button
 		color="primary"

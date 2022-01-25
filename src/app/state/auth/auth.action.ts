@@ -22,7 +22,5 @@ export namespace AuthAction {
 		`${ACTION_PREFIX} Authenticate Fail`
 	);
 
-    export const logout = createAction(
-        `${ACTION_PREFIX} Logout`
-    )
+	export const logout = createAction(`${ACTION_PREFIX} Logout`);
 }

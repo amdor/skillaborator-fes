@@ -8,7 +8,16 @@
 	justify-content: flex-start;
 
 	&-auth {
-        align-self: end;
+		align-self: end;
+		& &-login,
+		& &-logout {
+			margin-right: 8px;
+			padding-top: 8px;
+		}
+
+		& &-logout {
+			margin-left: 8px;
+		}
 	}
 
 	&-footer {

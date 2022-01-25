@@ -11,14 +11,15 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { filter, switchMapTo, withLatestFrom } from 'rxjs/operators';
+import { filter, withLatestFrom } from 'rxjs/operators';
+import { AuthState } from '../../state/auth/auth.reducer';
 import {
 	AuthAction,
 	ElaboratorAction,
 	getCurrentQuestion,
 	getLoadingCurrentQuestion,
 	getAccessToken,
-	getEmail,
+	getAuth,
 } from '../../state';
 import { Question } from '../elaborator-question.model';
 
@@ -35,7 +36,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
 	signInLink: string;
 	oneTimeCode = new FormControl('', [Validators.required]);
 	loading = false;
-	email = '';
+	canStart = false;
+	auth: AuthState | undefined;
 
 	private mainSubscription$$: Subscription;
 	private getCurrentQuestion$$: Subscription | undefined;
@@ -78,9 +80,19 @@ export class LobbyComponent implements OnInit, OnDestroy {
 				})
 		);
 		this.mainSubscription$$.add(
-			this.store.select(getEmail).subscribe({
-				next: (email) => {
-					this.email = email;
+			this.store.select(getAuth).subscribe({
+				next: (auth) => {
+					this.auth = auth;
+					const nextSkillaborationStart =
+						auth.nextSkillaborationStart;
+					if (nextSkillaborationStart) {
+						// TODO fix Date rehydration
+						this.canStart =
+							new Date(nextSkillaborationStart).getTime() <
+							Date.now();
+					} else {
+						this.canStart = false;
+					}
 					this.cdRef.markForCheck();
 				},
 			})

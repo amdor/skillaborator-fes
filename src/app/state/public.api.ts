@@ -22,4 +22,4 @@ export {
 	getOneTimeCode,
 } from './review/review.selector';
 
-export { getAccessToken, getEmail } from './auth/auth.selector';
+export { getAccessToken, getAuth } from './auth/auth.selector';

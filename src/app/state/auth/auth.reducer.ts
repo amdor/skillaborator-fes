@@ -1,13 +1,13 @@
 import { AuthAction } from './auth.action';
-import { createRehydrateReducer, LoginResponse } from '../../service';
+import { createRehydrateReducer } from '../../service';
 import { AUTH_STORAGE_KEY } from '../../service/utils/storage.service';
 import { on } from '@ngrx/store';
-import { AppState } from 'src/app';
 
 export interface AuthState {
 	accessToken: string;
 	email: string;
 	oneTimeCode: string;
+	nextSkillaborationStart?: Date;
 }
 
 const initialState: AuthState = {
@@ -19,12 +19,16 @@ const initialState: AuthState = {
 export const authReducer = createRehydrateReducer(
 	{ key: AUTH_STORAGE_KEY },
 	initialState,
-	on(AuthAction.authenticateSuccess, (state: AuthState, { email, token }) => {
-		return {
-			...state,
-			email,
-			accessToken: token,
-		};
-	}),
+	on(
+		AuthAction.authenticateSuccess,
+		(state: AuthState, { email, token, nextSkillaborationStart }) => {
+			return {
+				...state,
+				email,
+				accessToken: token,
+				nextSkillaborationStart: new Date(nextSkillaborationStart),
+			};
+		}
+	),
 	on(AuthAction.logout, () => initialState)
 );

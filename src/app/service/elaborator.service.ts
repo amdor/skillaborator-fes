@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import {
 	Question,
-	SelectedAnswer,
 	EvaluationResult,
 	GetSelectedAnswersResponse,
 } from '../component/elaborator-question.model';
