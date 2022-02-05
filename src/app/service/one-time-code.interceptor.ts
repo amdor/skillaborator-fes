@@ -19,7 +19,7 @@ export class OneTimeCodeInterceptor implements HttpInterceptor {
 			this.router.routerState.snapshot.root,
 		];
 		while (stack.length > 0) {
-			const route = stack.pop();
+			const route = stack.pop()!;
 			params = { ...params, ...route.params };
 			stack.push(...route.children);
 		}
@@ -46,7 +46,7 @@ export class OneTimeCodeInterceptor implements HttpInterceptor {
 				matchedEndpoint = elaboratorEndpoint;
 				break;
 		}
-		if (matchedEndpoint) {
+		if (matchedEndpoint!) {
 			const newReq = req.clone({
 				url: matchedEndpoint + `/${oneTimeCode}`,
 			});

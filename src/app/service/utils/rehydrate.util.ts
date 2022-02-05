@@ -11,6 +11,7 @@ import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 export interface RehydrateOptions {
 	key: string;
 	storageType?: StorageType;
+	excludedKeys?: string[];
 }
 
 export function createRehydrateReducer<S, A extends Action = Action>(
@@ -30,7 +31,13 @@ export function createRehydrateReducer<S, A extends Action = Action>(
 			state: S | undefined,
 			action: ActionType<ActionCreator[][number]>
 		) => {
-			const newState = oldOn.reducer(state, action);
+			const newState = oldOn.reducer(state ?? initialState, action);
+			const storableItem = { ...newState };
+			if (options.excludedKeys?.length) {
+				for (let path of options.excludedKeys) {
+					delete storableItem[path];
+				}
+			}
 			StorageService.setForKey(options.key, newState, storageType);
 			return newState;
 		};

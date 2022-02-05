@@ -2,11 +2,11 @@ import {
 	Question,
 	SelectedAnswer,
 } from '../../component/elaborator-question.model';
-import { createReducer, INITIAL_STATE, on } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { ElaboratorAction } from './elaborator.action';
 
 export interface ElaboratorState {
-	currentQuestion: Question;
+	currentQuestion: Question | undefined;
 	questions: Question[];
 	busy: boolean;
 	selectedAnswers?: SelectedAnswer[];
@@ -18,7 +18,7 @@ const initialState = {
 	busy: false,
 };
 
-export const elaboratorReducer = createReducer(
+export const elaboratorReducer = createReducer<ElaboratorState>(
 	initialState,
 	on(
 		ElaboratorAction.getQuestion,
@@ -38,15 +38,12 @@ export const elaboratorReducer = createReducer(
 		...state,
 		busy: false,
 	})),
-	on(
-		ElaboratorAction.saveSelectedAnswer,
-		(state: ElaboratorState, { selectedAnswer }) => {
-			const oldAnswers = state.selectedAnswers || [];
-			return {
-				...state,
-				selectedAnswers: [...oldAnswers, selectedAnswer],
-			};
-		}
-	),
+	on(ElaboratorAction.saveSelectedAnswer, (state, { selectedAnswer }) => {
+		const oldAnswers = state.selectedAnswers || [];
+		return {
+			...state,
+			selectedAnswers: [...oldAnswers, selectedAnswer],
+		};
+	}),
 	on(ElaboratorAction.reset, () => initialState)
 );

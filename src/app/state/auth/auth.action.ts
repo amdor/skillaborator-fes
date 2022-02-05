@@ -11,6 +11,21 @@ export namespace AuthAction {
 		})
 	);
 
+	export const getNewUserCode = createAction(
+		`${ACTION_PREFIX} Get New User Code`,
+		(accessToken: string, email: string) => ({
+			accessToken,
+			email,
+		})
+	);
+
+	export const getNextStart = createAction(
+		`${ACTION_PREFIX} Get Next Start`,
+		(accessToken: string) => ({
+			accessToken,
+		})
+	);
+
 	export const authenticateSuccess = createAction(
 		`${ACTION_PREFIX} Authenticate Success`,
 		(response: LoginResponse) => ({
@@ -18,8 +33,29 @@ export namespace AuthAction {
 		})
 	);
 
+	export const getNewUserCodeSuccess = createAction(
+		`${ACTION_PREFIX} Get New User Code Success`,
+		(oneTimeCode: string) => ({
+			oneTimeCode,
+		})
+	);
+	export const getNextStartSuccess = createAction(
+		`${ACTION_PREFIX} Get Next Start Success`,
+		(nextSkillaborationStart: string) => ({
+			nextSkillaborationStart,
+		})
+	);
+
 	export const authenticateFail = createAction(
 		`${ACTION_PREFIX} Authenticate Fail`
+	);
+
+	export const getNewUserCodeFail = createAction(
+		`${ACTION_PREFIX} Get New User Code Fail`
+	);
+
+	export const getNextStartFail = createAction(
+		`${ACTION_PREFIX} Get Next Start Fail`
 	);
 
 	export const logout = createAction(`${ACTION_PREFIX} Logout`);

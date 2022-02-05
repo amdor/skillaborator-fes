@@ -114,7 +114,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 			this.activatedRoute.snapshot.paramMap.get('oneTimeCode');
 		this.store.dispatch(
 			ElaboratorAction.evaluateAnswers(
-				oneTimeCode,
+				oneTimeCode!,
 				selectedAnswerIds,
 				selectedAnswerIds.length === 0
 			)
@@ -125,7 +125,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 	private saveAnswer(selectedAnswerIds: string[]) {
 		this.store.dispatch(
 			ElaboratorAction.saveSelectedAnswer({
-				questionId: this.question.id,
+				questionId: this.question!.id,
 				answerIds: selectedAnswerIds,
 			})
 		);

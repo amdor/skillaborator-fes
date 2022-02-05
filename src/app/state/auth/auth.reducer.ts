@@ -2,6 +2,7 @@ import { AuthAction } from './auth.action';
 import { createRehydrateReducer } from '../../service';
 import { AUTH_STORAGE_KEY } from '../../service/utils/storage.service';
 import { on } from '@ngrx/store';
+import { ElaboratorAction } from '..';
 
 export interface AuthState {
 	accessToken: string;
@@ -17,7 +18,10 @@ const initialState: AuthState = {
 };
 
 export const authReducer = createRehydrateReducer(
-	{ key: AUTH_STORAGE_KEY },
+	{
+		key: AUTH_STORAGE_KEY,
+		excludedKeys: ['oneTimeCode', 'nextSkillaborationStart'],
+	},
 	initialState,
 	on(
 		AuthAction.authenticateSuccess,
@@ -30,5 +34,22 @@ export const authReducer = createRehydrateReducer(
 			};
 		}
 	),
+	on(
+		AuthAction.getNewUserCodeSuccess,
+		(state: AuthState, { oneTimeCode }) => {
+			return {
+				...state,
+				oneTimeCode,
+			};
+		}
+	),
+	on(
+		AuthAction.getNextStartSuccess,
+		(state, { nextSkillaborationStart }) => ({
+			...state,
+			nextSkillaborationStart: new Date(nextSkillaborationStart),
+		})
+	),
+	on(ElaboratorAction.reset, (state) => ({ ...state, oneTimeCode: '' })),
 	on(AuthAction.logout, () => initialState)
 );

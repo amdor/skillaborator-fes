@@ -41,7 +41,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
 	private mainSubscription$$: Subscription;
 	private getCurrentQuestion$$: Subscription | undefined;
-	private lastRequestedOneTimeCode: string;
 
 	constructor(
 		private store: Store,
@@ -71,7 +70,12 @@ export class LobbyComponent implements OnInit, OnDestroy {
 				.pipe(withLatestFrom(accessToken$))
 				.subscribe(([params, accessToken]) => {
 					const authorizationCode = params['code'];
-					if (!authorizationCode || accessToken) {
+					if (!authorizationCode) {
+						if (accessToken) {
+							this.store.dispatch(
+								AuthAction.getNextStart(accessToken)
+							);
+						}
 						return;
 					}
 					this.store.dispatch(
@@ -85,13 +89,13 @@ export class LobbyComponent implements OnInit, OnDestroy {
 					this.auth = auth;
 					const nextSkillaborationStart =
 						auth.nextSkillaborationStart;
-					if (nextSkillaborationStart) {
-						// TODO fix Date rehydration
-						this.canStart =
-							new Date(nextSkillaborationStart).getTime() <
-							Date.now();
-					} else {
-						this.canStart = false;
+					// TODO fix Date rehydration
+					this.canStart = nextSkillaborationStart
+						? new Date(nextSkillaborationStart).getTime() <
+						  Date.now()
+						: false;
+					if (auth.oneTimeCode) {
+						this.startSkillaboration(auth.oneTimeCode);
 					}
 					this.cdRef.markForCheck();
 				},
@@ -112,16 +116,24 @@ export class LobbyComponent implements OnInit, OnDestroy {
 		return '';
 	}
 
-	startSkillaboration() {
-		if (!this.oneTimeCode.value) {
+	startSkillaboration(oneTimeCode?: string) {
+		if (!this.oneTimeCode.value && !oneTimeCode) {
+			if (this.auth?.accessToken && this.auth?.email) {
+				this.store.dispatch(
+					AuthAction.getNewUserCode(
+						this.auth.accessToken,
+						this.auth.email
+					)
+				);
+			}
 			return;
 		}
 		this.getCurrentQuestion$$?.unsubscribe();
 
-		this.lastRequestedOneTimeCode = this.oneTimeCode.value;
+		const lastRequestedOneTimeCode = oneTimeCode ?? this.oneTimeCode.value;
 		this.loading = true;
 		this.store.dispatch(
-			ElaboratorAction.getFirstQuestion(this.oneTimeCode.value)
+			ElaboratorAction.getFirstQuestion(lastRequestedOneTimeCode)
 		);
 		this.getCurrentQuestion$$ = this.store
 			.pipe(select(getCurrentQuestion), filter(Boolean))
@@ -129,7 +141,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 				next: () => {
 					this.router.navigate([
 						'elaborator',
-						this.lastRequestedOneTimeCode,
+						lastRequestedOneTimeCode,
 					]);
 				},
 			});

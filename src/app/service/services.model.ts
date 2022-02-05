@@ -3,3 +3,8 @@ export interface LoginResponse {
 	token: string;
 	nextSkillaborationStart: string;
 }
+
+
+export interface OneTimeCodeResponse {
+    oneTimeCode: string;
+}

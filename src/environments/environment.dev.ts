@@ -9,7 +9,7 @@ export const environment = {
 	selectedAnswersEndpoint: '/selectedAnswers',
 	login: '/linkedin-login',
 	newCode: '/new-code',
-	maxQuestionCount: 10,
+	maxQuestionCount: 2,
 	maxDemoQuestionCount: 2,
 	questionTimeout: 60,
 };

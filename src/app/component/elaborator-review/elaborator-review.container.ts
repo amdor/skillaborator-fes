@@ -151,7 +151,10 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 			next: ([persistedOneTimeCode, activatedRouteParams]) => {
 				const currentOneTimeCode =
 					activatedRouteParams.get('oneTimeCode');
-				if (persistedOneTimeCode !== currentOneTimeCode) {
+				if (
+					currentOneTimeCode &&
+					persistedOneTimeCode !== currentOneTimeCode
+				) {
 					this.store.dispatch(
 						ReviewAction.getEvaluationResults(currentOneTimeCode)
 					);
@@ -168,7 +171,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 	}
 
 	private intersect(arrA: string[], arrB: string[]): string[] {
-		const intersection = [];
+		const intersection: string[] = [];
 		const cloneB = [...arrB];
 
 		arrA.forEach((elemA) => {
@@ -236,7 +239,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
         {
           data: this.getData(maxScore),
           radius: (context) => {
-            const index = context.dataIndex;
+            const index = context.dataIndex!;
             const xValue = Number(labels[index]);
             const distanceFromScore = this.score - xValue;
             // the first label that exeeds score should mark the score
@@ -249,8 +252,8 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
       ],
     };
 		// score chart
-		const ctx = this._scoreChart.nativeElement.getContext('2d');
-		const chartModule = await this.chartModule;
+		const ctx = this._scoreChart!.nativeElement.getContext('2d');
+		const chartModule = await this.chartModule!;
 		this.chart = new chartModule.Chart(ctx, {
 			type: 'line',
 			data,
@@ -268,7 +271,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 					point: { backgroundColor: 'green' },
 				},
 				tooltips: { enabled: false },
-				hover: { mode: null },
+				hover: { mode: undefined },
 			},
 		});
 	}
@@ -276,7 +279,7 @@ export class ElaboratorReviewLobbyComponent implements OnInit, OnDestroy {
 	// 1/(20*sqrt(2*pi))*e^(-1/2*((x-180)/30)^2)*10^4
 	// 1/(20*sqrt(2*pi))*e^(-1/2*((x-maxScore*0.6)/30)^2)*10^4
 	private getData(maxScore: number) {
-		const dataSetData = [];
+		const dataSetData: number[] = [];
 		for (let x = 0; x < 280; x += 20) {
 			// prettier-ignore
 			const currentData = ( Math.E ** (-0.5 * ( (x-maxScore*0.6)/30) ** 2 ) ) / (20 * Math.sqrt(2*Math.PI) ) * 10**4;

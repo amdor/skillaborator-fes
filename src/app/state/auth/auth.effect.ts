@@ -19,5 +19,35 @@ export class AuthEffect {
 		)
 	);
 
+	getNewUserCode$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(AuthAction.getNewUserCode),
+			switchMap(({ accessToken, email }) =>
+				this.service.getOneTimeCodeForUser$(accessToken, email).pipe(
+					map((response) =>
+						AuthAction.getNewUserCodeSuccess(response.oneTimeCode)
+					),
+					catchError(() => of(AuthAction.getNewUserCodeFail()))
+				)
+			)
+		)
+	);
+
+	getNextStart$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(AuthAction.getNextStart),
+			switchMap(({ accessToken }) =>
+				this.service.getNextStart$(accessToken).pipe(
+					map((response) =>
+						AuthAction.getNextStartSuccess(
+							response.nextSkillaborationStart!
+						)
+					),
+					catchError(() => of(AuthAction.getNextStartFail()))
+				)
+			)
+		)
+	);
+
 	constructor(private actions$: Actions, private service: AuthService) {}
 }
