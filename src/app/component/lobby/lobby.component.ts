@@ -70,6 +70,15 @@ export class LobbyComponent implements OnInit, OnDestroy {
 				.pipe(withLatestFrom(accessToken$))
 				.subscribe(([params, accessToken]) => {
 					const authorizationCode = params['code'];
+					if (authorizationCode && accessToken) {
+						this.router.navigate([], {
+							queryParams: {
+								code: null,
+							},
+							queryParamsHandling: 'merge',
+						});
+                        return;
+					}
 					if (!authorizationCode) {
 						if (accessToken) {
 							this.store.dispatch(

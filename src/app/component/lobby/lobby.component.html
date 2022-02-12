@@ -1,11 +1,12 @@
 <div class="sk-lobby-auth">
-	<a
-		*ngIf="!auth?.email; else loggedIn"
-		[href]="signInLink"
-		mat-flat-button
-		class="sk-lobby-auth-login"
-		>Sign in</a
-	>
+	<a *ngIf="!auth?.email; else loggedIn" [href]="signInLink">
+		<img src="assets/Sign-In-Small---Default.png" alt="LinkedIn login" />
+		<img
+			src="assets/Sign-In-Small---Hover.png"
+			class="hover"
+			alt="LinkedIn login"
+		/>
+	</a>
 	<ng-template #loggedIn>
 		<span>Logged in as {{ auth.email }}</span>
 		<button mat-flat-button class="sk-lobby-auth-logout" (click)="logout()">
@@ -35,8 +36,13 @@
 	</div>
 </div>
 
-<h2 *ngIf="auth?.nextSkillaborationStart && !canStart">
-	New skillaboration can be started after {{ auth.nextSkillaborationStart }}
+<h2
+	*ngIf="auth?.nextSkillaborationStart && !canStart"
+	class="sk-lobby-next-skillaboration"
+>
+	New skillaboration can be started after <br />{{
+		auth.nextSkillaborationStart
+	}}
 </h2>
 
 <!-- USING PREREGISTERED ONE TIME CODES -->

@@ -9,15 +9,37 @@
 
 	&-auth {
 		align-self: end;
-		& &-login,
-		& &-logout {
-			margin-right: 8px;
-			padding-top: 8px;
-		}
+		margin-right: 8px;
+		margin-top: 8px;
 
 		& &-logout {
 			margin-left: 8px;
 		}
+
+		img.hover {
+			opacity: 0;
+			transition: opacity 0.2s;
+			display: none;
+		}
+
+		img {
+			display: block;
+			max-width: 160px;
+		}
+
+		&:hover {
+			img {
+				display: none;
+			}
+			img.hover {
+				display: block;
+				opacity: 1;
+			}
+		}
+	}
+
+	&-next-skillaboration {
+		text-align: center;
 	}
 
 	&-footer {
