@@ -1,5 +1,5 @@
 export enum ProfessionalLevel {
-  Beginner,
-  Medior,
-  Pro,
+	Beginner,
+	Medior,
+	Pro,
 }

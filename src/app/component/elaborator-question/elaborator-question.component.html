@@ -1,98 +1,100 @@
 <div class="elaborator-question-heading">
-  <label class="elaborator-question-question">
-    {{ question.value }}
-  </label>
-  <span *ngIf="question.code" class="elaborator-question-code-language">
-    {{ question.code.language }}
-  </span>
+	<label class="elaborator-question-question">
+		{{ question.value }}
+	</label>
+	<span *ngIf="question.code" class="elaborator-question-code-language">
+		{{ question.code.language }}
+	</span>
 </div>
 <pre *ngIf="question.code">
   <code [ngClass]="codeLanguage" class="elaborator-question-code-value unselectable">{{question?.code.value}}</code>
 </pre>
 <div class="elaborator-question-content">
-  <mat-radio-group
-    *ngIf="!question.multi"
-    aria-labelledby="elaborator-question-question"
-    class="elaborator-question-answer-group"
-    [disabled]="readOnly"
-    (change)="onRadioSelect($event)"
-    required
-  >
-    <mat-radio-button
-      class="elaborator-question-answer"
-      *ngFor="let answer of question.answers"
-      [value]="answer.id"
-      [checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
-      [ngClass]="{
-        'right-answer':
-          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          isRight(answer.id),
-        'missed-answer':
-          !selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          isRight(answer.id),
-        'wrong-answer':
-          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          !isRight(answer.id),
-        'read-only': readOnly
-      }"
-    >
-      <span>{{ answer.value }}</span>
-    </mat-radio-button>
-  </mat-radio-group>
+	<mat-radio-group
+		*ngIf="!question.multi"
+		aria-labelledby="elaborator-question-question"
+		class="elaborator-question-answer-group"
+		[disabled]="readOnly"
+		(change)="onRadioSelect($event)"
+		required
+	>
+		<mat-radio-button
+			class="elaborator-question-answer"
+			*ngFor="let answer of question.answers"
+			[value]="answer.id"
+			[checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
+			[ngClass]="{
+				'right-answer':
+					selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					isRight(answer.id),
+				'missed-answer':
+					!selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					isRight(answer.id),
+				'wrong-answer':
+					selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					!isRight(answer.id),
+				'read-only': readOnly
+			}"
+		>
+			<span>{{ answer.value }}</span>
+		</mat-radio-button>
+	</mat-radio-group>
 
-  <ul *ngIf="question.multi" class="elaborator-question-answer-group">
-    <li
-      *ngFor="let answer of question.answers"
-      class="elaborator-question-answer"
-      [ngClass]="{
-        'right-answer':
-          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          isRight(answer.id),
-        'missed-answer':
-          !selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          isRight(answer.id),
-        'wrong-answer':
-          selectedAndRightAnswer?.answerIds.includes(answer.id) &&
-          !isRight(answer.id),
-        'read-only': readOnly
-      }"
-    >
-      <mat-checkbox
-        [value]="answer.id"
-        [checked]="selectedAndRightAnswer?.answerIds.includes(answer.id)"
-        [disabled]="readOnly"
-        (change)="onCheckboxSelect($event, answer.id)"
-      >
-        <span>{{ answer.value }}</span>
-      </mat-checkbox>
-    </li>
-  </ul>
+	<ul *ngIf="question.multi" class="elaborator-question-answer-group">
+		<li
+			*ngFor="let answer of question.answers"
+			class="elaborator-question-answer"
+			[ngClass]="{
+				'right-answer':
+					selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					isRight(answer.id),
+				'missed-answer':
+					!selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					isRight(answer.id),
+				'wrong-answer':
+					selectedAndRightAnswer?.answerIds.includes(answer.id) &&
+					!isRight(answer.id),
+				'read-only': readOnly
+			}"
+		>
+			<mat-checkbox
+				[value]="answer.id"
+				[checked]="
+					selectedAndRightAnswer?.answerIds.includes(answer.id)
+				"
+				[disabled]="readOnly"
+				(change)="onCheckboxSelect($event, answer.id)"
+			>
+				<span>{{ answer.value }}</span>
+			</mat-checkbox>
+		</li>
+	</ul>
 </div>
 
 <ng-container *ngIf="!readOnly">
-  <sk-countdown-clock (clockTimeout)="onTimeout()"></sk-countdown-clock>
+	<sk-countdown-clock (clockTimeout)="onTimeout()"></sk-countdown-clock>
 
-  <div class="elaborator-question-footer">
-    <button
-      *ngIf="currentQuestionNumber !== maxQuestionCount"
-      mat-raised-button
-      color="primary"
-      [disabled]="!selectedAnswerIds.length"
-      (click)="onNextClick()"
-    >
-      Next question
-    </button>
-    <button
-      *ngIf="currentQuestionNumber === maxQuestionCount"
-      mat-raised-button
-      color="primary"
-      [disabled]="!selectedAnswerIds.length"
-      (click)="onEvaluate()"
-    >
-      Evaluate
-    </button>
-    <span class="elaborator-question-counter"
-      >{{ currentQuestionNumber }}/{{ maxQuestionCount }}</span
-    >
-  </div>
+	<div class="elaborator-question-footer">
+		<button
+			*ngIf="currentQuestionNumber !== maxQuestionCount"
+			mat-raised-button
+			color="primary"
+			[disabled]="!selectedAnswerIds.length"
+			(click)="onNextClick()"
+		>
+			Next question
+		</button>
+		<button
+			*ngIf="currentQuestionNumber === maxQuestionCount"
+			mat-raised-button
+			color="primary"
+			[disabled]="!selectedAnswerIds.length"
+			(click)="onEvaluate()"
+		>
+			Evaluate
+		</button>
+		<span class="elaborator-question-counter"
+			>{{ currentQuestionNumber }}/{{ maxQuestionCount }}</span
+		>
+	</div>
 </ng-container>

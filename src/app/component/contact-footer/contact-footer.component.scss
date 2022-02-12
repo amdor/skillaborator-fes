@@ -1,22 +1,22 @@
 .sk-contact-footer {
-  display: flex;
-  justify-self: flex-end;
-  align-self: flex-end;
-  margin-top: auto;
-  padding-top: 24px;
-  padding-bottom: 12px;
-  padding-right: 12px;
+	display: flex;
+	justify-self: flex-end;
+	align-self: flex-end;
+	margin-top: auto;
+	padding-top: 24px;
+	padding-bottom: 12px;
+	padding-right: 12px;
 
-  &-links {
-    display: flex;
-    align-items: center;
-    &.mat-button:hover .mat-button-focus-overlay {
-      opacity: 0;
-    }
+	&-links {
+		display: flex;
+		align-items: center;
+		&.mat-button:hover .mat-button-focus-overlay {
+			opacity: 0;
+		}
 
-    a,
-    img {
-      height: 36px;
-    }
-  }
+		a,
+		img {
+			height: 36px;
+		}
+	}
 }

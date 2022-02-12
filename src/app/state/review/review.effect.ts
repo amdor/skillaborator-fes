@@ -13,57 +13,63 @@ import { SelectedAnswer } from 'src/app/component/elaborator-question.model';
 
 @Injectable()
 export class ReviewEffect {
-  getEvaluationResults$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ReviewAction.getEvaluationResults),
-      mergeMap(({ oneTimeCode }) =>
-        this.service.getSelectedAnswers().pipe(
-          map(
-            ({
-              questionsWithRightAnswers,
-              score,
-              selectedAnswers,
-            }: GetSelectedAnswersResponse) => {
-              // TODO question model should contain right answers, simplification needed everywhere, less mapping etc.
-              const rightAnswersByQuestions = questionsWithRightAnswers.reduce(
-                (acc, questionWithRightAnswers) => {
-                  acc[questionWithRightAnswers.id] =
-                    questionWithRightAnswers.rightAnswers;
-                  return acc;
-                },
-                {}
-              );
-              const selectedAndRightAnswers = selectedAnswers.map(
-                (selectedAnswer: SelectedAnswer) => ({
-                  ...selectedAnswer,
-                  rightAnswerIds:
-                    rightAnswersByQuestions[selectedAnswer.questionId],
-                })
-              );
-              const questions = questionsWithRightAnswers.map(
-                ({ id, value, answers, multi, code }) => ({
-                  id,
-                  value,
-                  answers,
-                  multi,
-                  code,
-                })
-              );
-              return ReviewAction.getEvaluationResultsSuccess({
-                selectedAndRightAnswers,
-                score,
-                questions,
-                oneTimeCode,
-              });
-            }
-          ),
-          catchError((err) => {
-            return of(ReviewAction.getEvaluationResultsFail());
-          })
-        )
-      )
-    )
-  );
+	getEvaluationResults$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ReviewAction.getEvaluationResults),
+			mergeMap(({ oneTimeCode }) =>
+				this.service.getSelectedAnswers$().pipe(
+					map(
+						({
+							questionsWithRightAnswers,
+							score,
+							selectedAnswers,
+						}: GetSelectedAnswersResponse) => {
+							// TODO question model should contain right answers, simplification needed everywhere, less mapping etc.
+							const rightAnswersByQuestions =
+								questionsWithRightAnswers.reduce(
+									(acc, questionWithRightAnswers) => {
+										acc[questionWithRightAnswers.id] =
+											questionWithRightAnswers.rightAnswers;
+										return acc;
+									},
+									{}
+								);
+							const selectedAndRightAnswers = selectedAnswers.map(
+								(selectedAnswer: SelectedAnswer) => ({
+									...selectedAnswer,
+									rightAnswerIds:
+										rightAnswersByQuestions[
+											selectedAnswer.questionId
+										],
+								})
+							);
+							const questions = questionsWithRightAnswers.map(
+								({ id, value, answers, multi, code }) => ({
+									id,
+									value,
+									answers,
+									multi,
+									code,
+								})
+							);
+							return ReviewAction.getEvaluationResultsSuccess({
+								selectedAndRightAnswers,
+								score,
+								questions,
+								oneTimeCode,
+							});
+						}
+					),
+					catchError((err) => {
+						return of(ReviewAction.getEvaluationResultsFail());
+					})
+				)
+			)
+		)
+	);
 
-  constructor(private actions$: Actions, private service: ElaboratorService) {}
+	constructor(
+		private actions$: Actions,
+		private service: ElaboratorService
+	) {}
 }

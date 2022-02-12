@@ -3,13 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  apiUrl: 'localhost:5000',
-  questionEndpoint: '/question',
-  selectedAnswersEndpoint: '/selectedAnswers',
-  maxQuestionCount: 10,
-  maxDemoQuestionCount: 2,
-  questionTimeout: 60
+	production: false,
+	apiUrl: 'localhost:5000',
+	questionEndpoint: '/question',
+	selectedAnswersEndpoint: '/selectedAnswers',
+	login: '/linkedin-login',
+	newCode: '/new-code',
+	maxQuestionCount: 10,
+	maxDemoQuestionCount: 2,
+	questionTimeout: 60,
 };
 
 /*

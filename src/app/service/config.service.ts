@@ -3,19 +3,27 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-  getQuestionEndpoint(): string {
-    return environment.apiUrl + environment.questionEndpoint;
-  }
+	getQuestionEndpoint(): string {
+		return environment.apiUrl + environment.questionEndpoint;
+	}
 
-  getMaxQuestionsCount(): number {
-    return environment.maxQuestionCount;
-  }
+	getMaxQuestionsCount(): number {
+		return environment.maxQuestionCount;
+	}
 
-  getMaxDemoQuestionsCount(): number {
-    return environment.maxDemoQuestionCount;
-  }
+	getMaxDemoQuestionsCount(): number {
+		return environment.maxDemoQuestionCount;
+	}
 
-  getSelectedAnswersEndpoint(): string {
-    return environment.apiUrl + environment.selectedAnswersEndpoint;
-  }
+	getSelectedAnswersEndpoint(): string {
+		return environment.apiUrl + environment.selectedAnswersEndpoint;
+	}
+
+	getLinkedInLoginEndpoint(): string {
+		return environment.apiUrl + environment.login;
+	}
+
+	getNewCodeEndpoint(): string {
+		return environment.apiUrl + environment.newCode;
+	}
 }

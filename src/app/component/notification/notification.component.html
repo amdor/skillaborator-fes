@@ -1,18 +1,18 @@
 <ng-container *ngFor="let notification of displayedNotifications">
-  <ng-container [ngSwitch]="notification.type">
-    <div
-      *ngSwitchCase="notificationTypes.SUCCESS"
-      class="alert alert-success"
-      role="alert"
-    >
-      {{ "Success!!" }} {{ notification.message || "" }}
-    </div>
-    <div
-      *ngSwitchCase="notificationTypes.FAILURE"
-      class="alert alert-danger"
-      role="alert"
-    >
-      {{ "Failure" }} {{ notification.message || "" }}
-    </div>
-  </ng-container>
+	<ng-container [ngSwitch]="notification.type">
+		<div
+			*ngSwitchCase="notificationTypes.SUCCESS"
+			class="alert alert-success"
+			role="alert"
+		>
+			{{ "Success!!" }} {{ notification.message || "" }}
+		</div>
+		<div
+			*ngSwitchCase="notificationTypes.FAILURE"
+			class="alert alert-danger"
+			role="alert"
+		>
+			{{ "Failure" }} {{ notification.message || "" }}
+		</div>
+	</ng-container>
 </ng-container>

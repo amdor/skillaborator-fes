@@ -10,12 +10,12 @@
 $primary: mat-palette($mat-purple);
 $accent: mat-palette($mat-green, A200, A100, A400);
 $theme: mat-dark-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-    ),
-  )
+	(
+		color: (
+			primary: $primary,
+			accent: $accent,
+		),
+	)
 );
 
 @include angular-material-theme($theme);

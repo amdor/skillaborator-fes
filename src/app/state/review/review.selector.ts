@@ -1,7 +1,7 @@
 import { AppState } from '../..';
 
 export const getSelectedAndRightAnswers = (state: AppState) =>
-  state.review.selectedAndRightAnswers;
+	state.review.selectedAndRightAnswers;
 
 export const getQuestions = (state: AppState) => state.review.questions;
 

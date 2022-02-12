@@ -6,30 +6,32 @@ import { ElaboratorReviewLobbyComponent } from './component/elaborator-review/el
 import { LobbyComponent } from './component/lobby/lobby.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LobbyComponent,
-  },
-  {
-    path: 'elaborator/:oneTimeCode',
-    component: ElaboratorLobbyComponent,
-  },
-  {
-    path: 'review/:oneTimeCode',
-    component: ElaboratorReviewLobbyComponent,
-  },
-  {
-    path: 'demo/:oneTimeCode',
-    component: DemoComponent,
-  },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+	{
+		path: '',
+		component: LobbyComponent,
+	},
+	{
+		path: 'elaborator/:oneTimeCode',
+		component: ElaboratorLobbyComponent,
+	},
+	{
+		path: 'review/:oneTimeCode',
+		component: ElaboratorReviewLobbyComponent,
+	},
+	{
+		path: 'demo/:oneTimeCode',
+		component: DemoComponent,
+	},
+	{
+		path: '**',
+		redirectTo: '',
+	},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
-  exports: [RouterModule],
+	imports: [
+		RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+	],
+	exports: [RouterModule],
 })
 export class AppRoutingModule {}
