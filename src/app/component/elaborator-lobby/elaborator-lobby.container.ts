@@ -45,7 +45,7 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 	isLoadingQuestion = true;
 	currentQuestionNumber = 0;
 	readOnlyMode = false;
-	readonly maxQuestionCount: number;
+	maxQuestionCount: number | undefined;
 
 	private data$$: Subscription;
 	#demo: boolean = false;
@@ -55,14 +55,13 @@ export class ElaboratorLobbyComponent implements OnInit, OnDestroy {
 		private cdRef: ChangeDetectorRef,
 		private router: Router,
 		private activatedRoute: ActivatedRoute,
-		configService: ConfigService
-	) {
-		this.maxQuestionCount = this.#demo
-			? configService.getMaxDemoQuestionsCount()
-			: configService.getMaxQuestionsCount();
-	}
+		private configService: ConfigService
+	) {}
 
 	ngOnInit() {
+		this.maxQuestionCount = this.#demo
+			? this.configService.getMaxDemoQuestionsCount()
+			: this.configService.getMaxQuestionsCount();
 		const getCurrentQuestion$ = this.store.select(getCurrentQuestion).pipe(
 			tap((question: Question) => {
 				if (!question) {
